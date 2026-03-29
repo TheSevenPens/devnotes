@@ -6,6 +6,7 @@
 
 * [Overview](pen-input-on-windows/pen-input/README.md)
   * [Challenges developing pen-aware applications](pen-input-on-windows/pen-input/challenges-developing-pen-aware-applications.md)
+* [What Is "Windows Ink"?](pen-input-on-windows/what-is-windows-ink.md)
 * [Windows Pen API Landscape](pen-input-on-windows/windows-pen-api-landscape.md "API Landscape")
 * [Pen APIs compared](pen-input-on-windows/pen-apis-compared/README.md)
   * [Z position](pen-input-on-windows/pen-apis-compared/z-position.md)
