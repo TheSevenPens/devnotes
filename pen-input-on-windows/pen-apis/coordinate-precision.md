@@ -7,7 +7,7 @@ There are (at least) two coordinate systems in play:
 * The tablet digitizer coordinate system
 * The screen/desktop of your OS
 
-Tablet digitizers have very high resolution internally. For a modern tablet the resolution is specified by the manufacturer as 5280 LPI.&#x20;
+Tablet digitizers have very high resolution internally. For a modern tablet the resolution is specified by the manufacturer as 5280 LPI. Which translates to 200 LPmm. Though some tablets are around 100 LPmm.
 
 But depending on the API you use, you may not have access to that high-resolution data. Most pen APIs operate on screen pixels. For many cases, this is probably fine.
 
@@ -30,6 +30,24 @@ The X ranges below are examples based on these assumptions:
 | WinUI PointerPoint      | <p>0 to 1707<br>(DIPs on a 4K monitor at 225% scaling)</p> | No — DIP resolution                                                                                                                  |
 | WPF StylusPoint         | Framework-dependent                                        | No — layout resolution                                                                                                               |
 | RealTimeStylus          | <p>0 to ~264,000<br>(HIMETRIC, varies by tablet width)</p> | <p>Partial — HIMETRIC unit is 0.01mm (~2540 units/inch), but actual resolution depends on hardware and driver.<br>See footnote 2</p> |
+
+## Are these high-resolution ranges real?
+
+We are right to be skeptical of listed specs.\
+But it is easily seen in the Wacom driver UI that their tablets do have such a high resolution.
+
+Here's a screenshot of the tablet diagnostics reporting the position of the pen very close to the bottom right corner of the PTK-870 tablet.&#x20;
+
+<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+The maximum values I can achieve are
+
+* 34900 for X
+* 19500 for Y
+
+So 34900 lines / 349mm = 100 LPI&#x20;
+
+So 19500 lines / 195 mm = 100 LPI
 
 ## Footnotes
 
