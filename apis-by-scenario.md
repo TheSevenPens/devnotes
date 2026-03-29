@@ -1,4 +1,6 @@
-# API recommendations
+# APIs by scenario
+
+Depending on what you are trying to accomplish and which UX framework different APIs may be the right choice for you.
 
 | Scenario                             | Recommended API                       | Why                                          |
 | ------------------------------------ | ------------------------------------- | -------------------------------------------- |
@@ -10,4 +12,3 @@
 | Pen height above tablet              | Wintab                                | Only API exposing Z axis                     |
 | Full tilt as azimuth/altitude        | Wintab or RealTimeStylus              | Other APIs only provide X/Y tilt             |
 
-##

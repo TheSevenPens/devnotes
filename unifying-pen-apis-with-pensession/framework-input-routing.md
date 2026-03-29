@@ -1,6 +1,4 @@
-# Unifying Pen APIs with PenSession
-
-The `PenSession` library provides a unified `IPenSession` interface across four backends, with runtime switching via a dropdown — no restart required. See [FUTURES\_UNIFIED\_SESSION.md](../../../pen-input/apis/FUTURES_UNIFIED_SESSION.md) for the full design.
+# Framework input routing
 
 ### Framework specificity
 
@@ -15,7 +13,7 @@ Not all APIs work in all app types. The key factor is how input reaches the sess
 | **Avalonia Pointer**            | Avalonia `PointerMoved`/`PointerPressed` events   | **Avalonia only** — uses Avalonia's pointer system                                                                                   |
 | **WinForms Pointer**            | `IMessageFilter` intercepts `WM_POINTER` messages | **WinForms only** — `NativeWindow.AssignHandle` on Form HWNDs crashes; `IMessageFilter` intercepts at the message pump level instead |
 
-This is why the library is split into packages:
+This is why the PenSession library is split into packages:
 
 * `PenSession.dll` — framework-agnostic (Wintab + WmPointer)
 * `PenSession.WinUI.dll` — WinUI 3 extension (WinUI PointerPoint)

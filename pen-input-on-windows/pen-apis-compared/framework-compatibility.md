@@ -7,5 +7,3 @@
 | WinUI PointerPoint | No                                                                                                                                    | No                                 | Yes (native)                       | No                                 | No           |
 | WPF StylusPoint    | No                                                                                                                                    | Yes (native)                       | No                                 | No                                 | No           |
 | RealTimeStylus     | Yes (COM interop)                                                                                                                     | Yes (COM interop)                  | Possible (COM)                     | Possible (COM)                     | Yes (COM)    |
-
-##
