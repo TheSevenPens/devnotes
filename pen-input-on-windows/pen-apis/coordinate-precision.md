@@ -1,6 +1,19 @@
 # Coordinate Precision
 
-### Coordinate Precision
+## Overview
+
+There are (at least) two coordinate systems in play:
+
+* The tablet digitizer coordinate system
+* The screen/desktop of your OS
+
+Tablet digitizers have very high resolution internally. For a modern tablet the resolution is specified by the manufacturer as 5280 LPI.&#x20;
+
+But depending on the API you use, you may not have access to that high-resolution data. Most pen APIs operate on screen pixels. For many cases, this is probably fine.
+
+But if you do want high-resolution - as it stands for a modern Windows application, WinTab is the only practical choice. Even then, be aware, you have to use configure WinTab to use its high-resolution mode (referred to as the "Digitizer Context" in WinTab terminology).
+
+## Coordinate precision comparison
 
 The X ranges below are examples based on these assumptions:
 
@@ -9,19 +22,16 @@ The X ranges below are examples based on these assumptions:
 * **Tablet native (52,600):** a Wacom Intuos Pro Large PTK-870 (349mm active width at 5080 LPI = \~52,600 native units). Other tablets will differ — smaller tablets or lower-resolution models produce smaller ranges
 * **HIMETRIC (264,000):** HIMETRIC units are 0.01mm, so a 264mm-wide tablet = \~264,000 units
 
-| API                     | Typical X range                                | Tablet resolution preserved?                                                                                 |
-| ----------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Wintab System           | 0–3,840 (screen pixels on a 4K monitor)        | No — downscaled to screen pixels                                                                             |
-| Wintab Digitizer Hi-Res | 0–52,600 (tablet native, varies by device)     | **Yes** — full tablet LPI                                                                                    |
-| WM\_POINTER             | 0–3,840 (screen pixels on a 4K monitor)        | No — screen pixels¹                                                                                          |
-| WinUI PointerPoint      | 0–1,707 (DIPs on a 4K monitor at 225% scaling) | No — DIP resolution                                                                                          |
-| WPF StylusPoint         | Framework-dependent                            | No — layout resolution                                                                                       |
-| RealTimeStylus          | 0–\~264,000 (HIMETRIC, varies by tablet width) | Partial — HIMETRIC unit is 0.01mm (\~2540 units/inch), but actual resolution depends on hardware and driver² |
-|                         |                                                |                                                                                                              |
+| API                     | Typical X range                                            | Tablet resolution preserved?                                                                                                         |
+| ----------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Wintab System           | <p>0 to 3840<br>(screen pixels on a 4K monitor)</p>        | No — downscaled to screen pixels                                                                                                     |
+| Wintab Digitizer Hi-Res | <p>0 to 52600<br>(tablet native, varies by device)</p>     | **Yes** — full tablet LPI                                                                                                            |
+| WM\_POINTER             | <p>0 to 3840<br>(screen pixels on a 4K monitor)</p>        | <p>No — screen pixels<br>See footnote 1</p>                                                                                          |
+| WinUI PointerPoint      | <p>0 to 1707<br>(DIPs on a 4K monitor at 225% scaling)</p> | No — DIP resolution                                                                                                                  |
+| WPF StylusPoint         | Framework-dependent                                        | No — layout resolution                                                                                                               |
+| RealTimeStylus          | <p>0 to ~264,000<br>(HIMETRIC, varies by tablet width)</p> | <p>Partial — HIMETRIC unit is 0.01mm (~2540 units/inch), but actual resolution depends on hardware and driver.<br>See footnote 2</p> |
 
-### Footnotes
-
-##
+## Footnotes
 
 **¹ WM\_POINTER precision:** The Windows pointer input stack internally tracks higher-resolution input from the tablet hardware, but coordinates exposed via Win32 APIs (`ptPixelLocation` in `POINTER_INFO`) are quantized to physical screen pixels. Higher-frequency sampling is available via `GetPointerInfoHistory`, but the coordinate space remains screen pixels — you do not get tablet-native resolution as with Wintab Digitizer Hi-Res.
 
