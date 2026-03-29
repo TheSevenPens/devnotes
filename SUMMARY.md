@@ -22,7 +22,7 @@
 
 * [Implementation notes](implementation-notes/README.md)
   * [Latency Implications](implementation-notes/latency-implications.md)
-  * [Wintab vs Windows Ink Driver Conflict](implementation-notes/wintab-vs-windows-ink-driver-conflict.md)
+  * [Wintab and Windows Ink Coexistence](implementation-notes/wintab-vs-windows-ink-driver-conflict.md)
   * [Known Quirks and Gotchas](implementation-notes/known-quirks-and-gotchas.md)
   * [DPI and Pen Coordinates](implementation-notes/dpi-and-pen-coordinates.md)
   * [Per-Monitor V2 DPI Awareness](implementation-notes/per-monitor-v2-dpi-awareness.md)
