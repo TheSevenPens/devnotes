@@ -63,8 +63,10 @@ The context handle values:
 | `DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2` | -4    | Per-Monitor V2 — recommended for pen input apps |
 | `DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED`    | -5    | DPI unaware with improved GDI scaling           |
 
-### Why WinForms doesn't need this
+### WinForms in .NET 10 is already handles Per-Monitor V2
 
 In WinForms (.NET 10), the process is already Per-Monitor V2 from startup. `Control.PointToClient()` internally calls `ScreenToClient` which returns physical-pixel-based logical coordinates automatically. No thread context switching is needed — `PointToClient` handles everything in one call.
+
+### Note on WinUI3
 
 In WinUI 3, the situation is more complex because the XAML layout engine uses DIPs (not physical pixels), and the thread's DPI context may vary. The explicit `SetThreadDpiAwarenessContext` call ensures consistency between `ClientToScreen` (physical pixels) and Wintab `pkX/pkY` (also physical pixels).

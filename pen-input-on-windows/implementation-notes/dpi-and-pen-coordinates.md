@@ -14,6 +14,8 @@ Pen coordinate handling on high-DPI Windows displays is one of the most common s
 
 Your app must be **Per-Monitor V2 DPI aware**. This ensures `ClientToScreen`, `ScreenToClient`, `PointFromScreen`, and similar APIs operate in the same coordinate space as Wintab.
 
+More here: [Per-Monitor V2 DPI Awareness](per-monitor-v2-dpi-awareness.md)
+
 ### Native C++ apps
 
 ```cpp
