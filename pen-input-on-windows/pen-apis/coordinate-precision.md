@@ -20,7 +20,7 @@ The X ranges below are examples based on these assumptions:
 * **Screen pixels (3,840):** a single 4K UHD monitor (3840×2160 physical pixels)
 * **DIPs (1,707):** the same 4K monitor at 225% display scaling (3840 / 2.25 = 1,707 DIPs)
 * **Tablet native (52,600):** a Wacom Intuos Pro Large PTK-870 (349mm active width at 5080 LPI = \~52,600 native units). Other tablets will differ — smaller tablets or lower-resolution models produce smaller ranges
-* **HIMETRIC (264,000):** HIMETRIC units are 0.01mm, so a 264mm-wide tablet = \~264,000 units
+* **HIMETRIC (26,400):** HIMETRIC units are 0.01mm, so a 264mm-wide tablet = \~26400 units
 
 | API                     | Typical X range                                            | Tablet resolution preserved?                                                                                                         |
 | ----------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
