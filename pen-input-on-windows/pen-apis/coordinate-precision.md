@@ -7,7 +7,7 @@ There are (at least) two coordinate systems in play:
 * The tablet digitizer coordinate system
 * The screen/desktop of your OS
 
-Tablet digitizers have very high resolution internally. For a modern tablet the resolution is specified by the manufacturer as 5280 LPI. Which translates to 200 LPmm. Though some tablets are around 100 LPmm.
+Tablet digitizers have very high resolution internally. For a modern tablet the resolution is specified by the manufacturer as 5080 LPI. Which translates to 200 LPmm. Though some tablets are around 100 LPmm.
 
 But depending on the API you use, you may not have access to that high-resolution data. Most pen APIs operate on screen pixels. For many cases, this is probably fine.
 

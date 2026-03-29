@@ -15,7 +15,7 @@ The motivation for getting this documentation together comes from the challenges
 ## Frameworks
 
 * [Framework-Specific Pen Input Routing](../implementation-notes/framework-pen-input-routing.md) — Why WM\_POINTER doesn't work in WinUI/WPF/WinForms/Avalonia, and what to use instead
-* [Rendering Approaches for Pen Apps](../rendering-for-pen-apps.md) — Bitmap-backed vs retained mode, SkiaSharp pattern, framework comparison
+* [Rendering Approaches for Pen Apps](../../rendering/rendering-for-pen-apps.md) — Bitmap-backed vs retained mode, SkiaSharp pattern, framework comparison
 
 ## Gotchas
 

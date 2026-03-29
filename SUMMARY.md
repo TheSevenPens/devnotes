@@ -14,8 +14,9 @@
   * [Framework Compatibility](pen-input-on-windows/pen-apis/framework-compatibility.md)
   * [API recommendations](pen-input-on-windows/pen-apis/api-recommendations.md)
   * [Hover / Proximity Behavior](pen-input-on-windows/pen-apis/hover-proximity-behavior.md)
-  * [Tilt / Orientation Data](pen-input-on-windows/pen-apis/tilt-orientation-data.md)
-  * [Unifying Pen APIs with PenSession](pen-input-on-windows/pen-apis/unifying-pen-apis-with-pensession.md)
+  * [Pen Orientation Data](pen-input-on-windows/pen-apis/pen-orientation-data.md)
+  * [Unifying Pen APIs with PenSession](pen-input-on-windows/pen-apis/unifying-pen-apis-with-pensession/README.md "PenSession")
+    * [PenSession Tilt handling](pen-input-on-windows/pen-apis/unifying-pen-apis-with-pensession/pensession-tilt-handling.md "Tilt handling")
 * [Implementation notes](pen-input-on-windows/implementation-notes/README.md)
   * [Latency Implications](pen-input-on-windows/implementation-notes/latency-implications.md)
   * [Wintab vs Windows Ink Driver Conflict](pen-input-on-windows/implementation-notes/wintab-vs-windows-ink-driver-conflict.md)
@@ -24,7 +25,13 @@
   * [Per-Monitor V2 DPI Awareness](pen-input-on-windows/implementation-notes/per-monitor-v2-dpi-awareness.md)
   * [WM\_POINTER Event Coalescing](pen-input-on-windows/implementation-notes/wm_pointer-event-coalescing.md)
   * [WM\_POINTER Coalescing](pen-input-on-windows/implementation-notes/wm-pointer-coalescing.md)
+  * [WM\_POINTER Input Routing](pen-input-on-windows/implementation-notes/framework-pen-input-routing.md)
   * [Wintab Gotchas](pen-input-on-windows/implementation-notes/wintab-gotchas.md)
-  * [Framework Pen Input Routing](pen-input-on-windows/implementation-notes/framework-pen-input-routing.md)
-* [Rendering for Pen Apps](pen-input-on-windows/rendering-for-pen-apps.md)
-* [References](pen-input-on-windows/references.md)
+
+## Rendering
+
+* [Rendering for Pen Apps](rendering/rendering-for-pen-apps.md)
+
+## MISC
+
+* [References](misc/references.md)
