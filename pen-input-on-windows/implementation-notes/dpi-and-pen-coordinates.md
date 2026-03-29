@@ -1,18 +1,16 @@
-# DPI Awareness and Pen Coordinates
+# DPI and Pen Coordinates
 
-Pen coordinate handling on high-DPI Windows displays is one of the most common sources of bugs in drawing applications. This article covers the pitfalls and solutions.
+## Overview
 
-## The Core Problem
+Pen coordinate handling on high-DPI Windows displays is one of the most common sources of bugs in drawing applications. Depending on how your aware your app is of DPI, the problem varies
 
-Wintab always reports pen positions in **physical screen pixels** — the actual hardware pixel positions. But your app's coordinate system depends on its DPI awareness level:
-
-| DPI Awareness | What Win32 APIs return | What happens |
-|---|---|---|
+| DPI Awareness         | What Win32 APIs return                 | What happens                                                 |
+| --------------------- | -------------------------------------- | ------------------------------------------------------------ |
 | DPI Unaware (default) | Virtualized coordinates (as if 96 DPI) | Wintab and Win32 coords don't match — pen drifts from stroke |
-| System DPI Aware | Primary monitor's DPI | Works on primary monitor, broken on others |
-| Per-Monitor V2 | Physical pixels (real positions) | Matches Wintab — correct on all monitors |
+| System DPI Aware      | Primary monitor's DPI                  | Works on primary monitor, broken on others                   |
+| Per-Monitor V2        | Physical pixels (real positions)       | Matches Wintab — correct on all monitors                     |
 
-## The Fix
+## Doing it the right way: Per-Monitor V2
 
 Your app must be **Per-Monitor V2 DPI aware**. This ensures `ClientToScreen`, `ScreenToClient`, `PointFromScreen`, and similar APIs operate in the same coordinate space as Wintab.
 
@@ -46,7 +44,7 @@ Without this, the entire UI renders blurry (bitmap-scaled) and pen coordinates d
 
 .NET 10 WPF is Per-Monitor V2 by default. `PointFromScreen` handles DPI conversion.
 
-## WinUI 3 Coordinate Conversion
+### WinUI 3 Coordinate Conversion
 
 WinUI 3 uses DIPs (device-independent pixels) for all XAML layout. Wintab uses physical screen pixels. To convert:
 
@@ -69,11 +67,12 @@ finally
 }
 ```
 
-## Common Symptoms
+### Common WinUI 3 DPI Symptoms
 
-| Symptom | Likely cause |
-|---|---|
-| Pen position drifts from stroke as you move right/down | App is not DPI-aware — `ScreenToClient` returns virtualized coordinates |
-| UI is blurry | WinUI 3 unpackaged app missing DPI manifest |
-| Coordinates correct on primary monitor, wrong on secondary | System DPI Aware instead of Per-Monitor V2 |
-| WinUI 3 coordinates don't match Wintab | `ClientToScreen` called without Per-Monitor V2 thread context |
+| Symptom                                                    | Likely cause                                                            |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Pen position drifts from stroke as you move right/down     | App is not DPI-aware — `ScreenToClient` returns virtualized coordinates |
+| UI is blurry                                               | WinUI 3 unpackaged app missing DPI manifest                             |
+| Coordinates correct on primary monitor, wrong on secondary | System DPI Aware instead of Per-Monitor V2                              |
+| WinUI 3 coordinates don't match Wintab                     | `ClientToScreen` called without Per-Monitor V2 thread context           |
+
