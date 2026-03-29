@@ -11,6 +11,7 @@
   * [Pressure Data](pen-input-on-windows/pen-apis/pressure-data.md)
   * [Coordinate Precision](pen-input-on-windows/pen-apis/coordinate-precision.md)
   * [Additional Pen Data](pen-input-on-windows/pen-apis/additional-pen-data.md)
+  * [Z position](pen-input-on-windows/pen-apis/z-position.md)
   * [Framework Compatibility](pen-input-on-windows/pen-apis/framework-compatibility.md)
   * [API recommendations](pen-input-on-windows/pen-apis/api-recommendations.md)
   * [Hover / Proximity Behavior](pen-input-on-windows/pen-apis/hover-proximity-behavior.md)

@@ -29,7 +29,7 @@ The X ranges below are examples based on these assumptions:
 | WM\_POINTER             | <p>0 to 3840<br>(screen pixels on a 4K monitor)</p>        | <p>No — screen pixels<br>See footnote 1</p>                                                                                          |
 | WinUI PointerPoint      | <p>0 to 1707<br>(DIPs on a 4K monitor at 225% scaling)</p> | No — DIP resolution                                                                                                                  |
 | WPF StylusPoint         | Framework-dependent                                        | No — layout resolution                                                                                                               |
-| RealTimeStylus          | <p>0 to ~264,000<br>(HIMETRIC, varies by tablet width)</p> | <p>Partial — HIMETRIC unit is 0.01mm (~2540 units/inch), but actual resolution depends on hardware and driver.<br>See footnote 2</p> |
+| RealTimeStylus          | <p>0 to ~26400<br>(HIMETRIC, varies by tablet width)</p>   | <p>Partial — HIMETRIC unit is 0.01mm (~2540 units/inch), but actual resolution depends on hardware and driver.<br>See footnote 2</p> |
 
 ## Are these high-resolution ranges real?
 
