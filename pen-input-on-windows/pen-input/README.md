@@ -10,11 +10,11 @@ The motivation for getting this documentation together comes from the challenges
 
 ## APIs
 
-* [Windows Pen API Landscape](../windows-pen-api-landscape/) — Comprehensive comparison of all Windows pen input APIs (Wintab, WM\_POINTER, WinUI, WPF, RealTimeStylus)
+* [Windows Pen API Landscape](../pen-apis/windows-pen-api-landscape/) — Comprehensive comparison of all Windows pen input APIs (Wintab, WM\_POINTER, WinUI, WPF, RealTimeStylus)
 
 ## Frameworks
 
-* [Framework-Specific Pen Input Routing](../framework-pen-input-routing.md) — Why WM\_POINTER doesn't work in WinUI/WPF/WinForms/Avalonia, and what to use instead
+* [Framework-Specific Pen Input Routing](../framework-pen-input-routing/) — Why WM\_POINTER doesn't work in WinUI/WPF/WinForms/Avalonia, and what to use instead
 * [Rendering Approaches for Pen Apps](../rendering-for-pen-apps.md) — Bitmap-backed vs retained mode, SkiaSharp pattern, framework comparison
 
 ## Gotchas
@@ -22,3 +22,4 @@ The motivation for getting this documentation together comes from the challenges
 * [DPI Awareness and Pen Coordinates](../dpi-and-pen-coordinates.md) — The #1 source of pen coordinate bugs
 * [WM\_POINTER Event Coalescing](../wm-pointer-coalescing.md) — Why strokes look like polygons and how to fix it
 * [Wintab Gotchas](../wintab-gotchas.md) — 12 hard-won lessons from implementing Wintab
+

@@ -11,4 +11,4 @@ Notes on building drawing applications and creative technology on Windows. Cover
 ## Related Projects
 
 * [WinPenSession](https://github.com/TheSevenPens/WinPenSession) — Unified pen input SDK for Windows
-* [WintabDN](https://github.com/TheSevenPens/Wacom_WinTabDN) — Low-level Wintab .NET library
+* [Wacom\_WintabDN](https://github.com/TheSevenPens/Wacom_WinTabDN) — Low-level Wintab .NET library. This is a refactoring and cleanup of Wacom's WintabDN library. It does exactly the same thing but the code inside is more modern, follows more best practices. I don't think anyone would need this in practice, but I am keeping it around since it was the start of my exploration with the topic of Windows pen input APIs.

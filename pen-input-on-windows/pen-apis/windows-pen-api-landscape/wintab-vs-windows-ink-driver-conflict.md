@@ -17,4 +17,4 @@ Many tablet drivers (including Wacom's) treat Wintab and Windows Ink as mutually
 * The session factory must probe for actual driver support, not just OS capability
 * Offering both Wintab and WM\_POINTER in a dropdown is only meaningful if the driver supports both
 * Starting a Wintab session may disable WM\_POINTER for the rest of the process lifetime (driver-dependent)
-* See [FUTURES\_UNIFIED\_SESSION.md](../../pen-input/apis/FUTURES_UNIFIED_SESSION.md) for the full abstraction design
+* See [FUTURES\_UNIFIED\_SESSION.md](../../../pen-input/apis/FUTURES_UNIFIED_SESSION.md) for the full abstraction design
