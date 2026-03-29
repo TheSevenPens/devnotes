@@ -33,6 +33,8 @@ process_point(pen_info);
 
 When `GetPointerPenInfoHistory` returns `count == 1`, the data may differ from what `GetPointerPenInfo` returns for the same event. Using `count > 0` was found to break WM_POINTER completely in some apps — pen data silently stops arriving. Always fall through to `GetPointerPenInfo` for single events.
 
+This was discovered through debugging: using `count > 0` caused a Win32 scribble app to silently lose all WM_POINTER data. The `count == 1` history path consumed events without producing usable output. The fix is simple but the failure mode is silent — no errors, just no data.
+
 ## Framework-Specific Sessions Are Not Affected
 
 WinUI 3, WPF, WinForms, and Avalonia decoalesce pointer events internally before delivering them to app event handlers. Their native input stacks handle history recovery transparently. Only raw Win32 `WM_POINTER` subclassing requires explicit history retrieval.
