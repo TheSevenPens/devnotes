@@ -1,7 +1,5 @@
 # Framework Compatibility
 
-## Framework Compatibility
-
 | API                | WinForms                                                                                                                              | WPF                                | WinUI 3                            | Avalonia                           | Raw Win32    |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- | ------------ |
 | Wintab             | Yes (via P/Invoke or .NET wrapper)                                                                                                    | Yes (via P/Invoke or .NET wrapper) | Yes (via P/Invoke or .NET wrapper) | Yes (via P/Invoke or .NET wrapper) | Yes (native) |
