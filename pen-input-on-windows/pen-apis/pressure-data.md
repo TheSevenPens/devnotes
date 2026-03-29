@@ -1,8 +1,6 @@
 # Pressure Data
 
-### Pressure Data
-
-Note: "Normal" in Wintab's `pkNormalPressure` does **not** mean "normalized." It means **normal force** — the pressure applied perpendicular (normal) to the tablet surface, as opposed to `pkTangentPressure` which measures tangential (sideways) force from an airbrush finger wheel. The value is a raw integer that must be divided by `GetMaxPressure()` to normalize.
+## Overview
 
 | API                | Pressure type                        | Range                                                   | Normalization      |
 | ------------------ | ------------------------------------ | ------------------------------------------------------- | ------------------ |
@@ -12,4 +10,6 @@ Note: "Normal" in Wintab's `pkNormalPressure` does **not** mean "normalized." It
 | WPF StylusPoint    | `PressureFactor` (float)             | 0.0–1.0                                                 | Pre-normalized     |
 | RealTimeStylus     | `PACKET_PROPERTY.pkNormalPressure`   | Device-specific                                         | App normalizes     |
 
-###
+## Wintab: pkNormalPressure
+
+Note: "Normal" in Wintab's `pkNormalPressure` does **not** mean "normalized." It means **normal force** — the pressure applied perpendicular (normal) to the tablet surface, as opposed to `pkTangentPressure` which measures tangential (sideways) force from an airbrush finger wheel. The value is a raw integer that must be divided by `GetMaxPressure()` to normalize.

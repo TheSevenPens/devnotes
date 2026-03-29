@@ -1,6 +1,6 @@
 # Tilt / Orientation Data
 
-### Tilt / Orientation Data
+### Overview
 
 **Twist** (also called **barrel rotation**) is the rotation of the pen around its own long axis — like turning a screwdriver. Twist support is rare — it requires both a specific tablet model and a specific pen that contains a rotation sensor (e.g., Wacom's Art Pen or Airbrush stylus). Standard pen styluses do not report twist, and most consumer tablets do not support it even with the right pen. The APIs list twist support, but in practice very few hardware setups actually produce twist data.
 
@@ -12,4 +12,4 @@
 | WPF StylusPoint    | `XTiltOrientation` / `YTiltOrientation`                                                     | Not directly available              | Limited                                     |
 | RealTimeStylus     | Azimuth + Altitude + Twist                                                                  | Full                                | Similar to Wintab                           |
 
-**PenPoint normalization:** The unified `PenPoint` struct carries **both** representations (Azimuth/Altitude and TiltX/TiltY), all normalized to **tenths of a degree**. Each backend computes whichever it doesn't have natively. WM\_POINTER's integer degrees are multiplied by 10; Wintab's spherical values are converted via trigonometry. Consumers can use either representation without knowing which API produced the data.
+**PenSession PenPoint normalization:** The unified `PenPoint` struct carries **both** representations (Azimuth/Altitude and TiltX/TiltY), all normalized to **tenths of a degree**. Each backend computes whichever it doesn't have natively. WM\_POINTER's integer degrees are multiplied by 10; Wintab's spherical values are converted via trigonometry. Consumers can use either representation without knowing which API produced the data.
