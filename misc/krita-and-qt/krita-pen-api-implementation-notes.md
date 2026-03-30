@@ -1,14 +1,21 @@
 # Krita pen api implementation notes
 
-## Implementation notes
-
-### source-file map: Krita → Qt → WinTab / WM\_POINTER
+### The Krita → Qt → WinTab / WM\_POINTER path
 
 #### Krita side
 
-In current Krita startup code on Windows with Qt 6, Krita reads its saved tablet preference, computes `forceWinTab`, gets Qt’s Windows-native application interface, and calls `setWinTabEnabled(forceWinTab)`. In Qt 5 builds, Krita instead uses `Qt::AA_MSWindowsUseWinTabAPI`. That confirms your “save preference now, apply on next startup” model. ([GitHub](https://github.com/KDE/krita/blob/master/krita/main.cc))
+Krita startup code on Windows with Qt6:
 
-So the flow is:
+* Krita reads its saved tablet preference
+* computes `forceWinTab`
+* gets Qt’s Windows-native application interface
+* calls `setWinTabEnabled(forceWinTab)`.&#x20;
+
+Krita startup code on Windows with Qt5
+
+* Krita instead uses `Qt::AA_MSWindowsUseWinTabAPI`. ([GitHub](https://github.com/KDE/krita/blob/master/krita/main.cc))
+
+The flow is:
 
 ```
 Tablet Settings UI
@@ -25,9 +32,7 @@ The key Qt pieces are:
 * In the Windows platform plugin, `QWindowsApplication::setWinTabEnabled()` is implemented by asking `QWindowsContext` to either `initTablet()` or `disposeTablet()`.
 * `QWindowsContext::initTablet()` creates `QWindowsTabletSupport`; `disposeTablet()` destroys it.
 
-That means the “backend switch” is not some abstract flag only. It concretely creates or tears down Qt’s WinTab support object.
-
-#### WinTab path inside Qt
+#### WinTab inside Qt
 
 The WinTab implementation lives in:
 
@@ -42,13 +47,11 @@ What that code does:
 4. Receives `WT_PROXIMITY` and `WT_PACKET`
 5. Converts packet data into Qt tablet events via `QWindowSystemInterface::handleTabletEvent(...)`
 
-That is the exact “WinTab → Qt abstraction → QTabletEvent” path.
-
 #### WM\_POINTER / Windows Pointer path inside Qt
 
 The Windows event dispatcher path in `qwindowscontext.cpp` includes `qwindowspointerhandler.h`, and routes `PointerEvent` / `NonClientPointerEvent` to `QWindowsPointerHandler::translatePointerEvent(...)`. Mouse events go through the same pointer handler’s mouse translation path.
 
-So, conceptually:
+So, conceptually for WM\_POINTER:
 
 ```
 WM_POINTER / Windows Ink
@@ -57,7 +60,7 @@ WM_POINTER / Windows Ink
   -> QTabletEvent / Qt input events
 ```
 
-while
+while while for WinTab:
 
 ```
 WinTab
@@ -65,10 +68,6 @@ WinTab
   -> QWindowSystemInterface
   -> QTabletEvent / Qt input events
 ```
-
-#### Activation behavior
-
-When a Qt window is activated, `QWindowsContext::windowsProc()` calls `tabletSupport()->notifyActivate()` if WinTab support exists. That is part of keeping the WinTab context active/cooperative with other tablet apps.
 
 ### Minimal code that mimics Krita’s Qt 6 startup logic
 
@@ -162,8 +161,6 @@ int main(int argc, char *argv[])
 
 If you do **not** want to rely on private Qt headers, the usual WinTab forcing mechanism is to set `QT_WINTAB_ENABLED=1` before creating the application object. Qt documents WinTab as being used by the Windows platform plugin, and the WinTab support is part of the tablet-event feature set. ([Qt Documentation](https://doc.qt.io/qt-6/qtgui-attribution-wintab.html?utm_source=chatgpt.com))
 
-Example:
-
 ```cpp
 #include <QApplication>
 #include <QWidget>
@@ -183,9 +180,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-That does **not** mirror Krita’s exact code path, but it does mirror the same startup-time requirement: decide before or during platform initialization, not mid-session. Krita’s own behavior also reflects startup-time selection rather than hot swapping. ([GitHub](https://github.com/KDE/krita/blob/master/krita/main.cc))
-
-### 4) Clean mental model of the exact Qt 6 flow
+### Clean model of the exact Qt 6 flow
 
 This is the most accurate compact picture:
 
@@ -211,6 +206,3 @@ If false:
   -> Qt emits unified events to the app
 ```
 
-One subtle point worth calling out
-
-Krita’s current Qt 6 code creates `KisApplication app(...)` and then calls `setWinTabEnabled(...)` immediately afterward, rather than before constructing the app object. So in **current practice**, this specific switch is being applied right after app creation through the platform integration object, not purely via a pre-app environment variable. That is an important nuance if you want to mimic Krita exactly rather than just “enable WinTab somehow.” ([GitHub](https://github.com/KDE/krita/blob/master/krita/main.cc))

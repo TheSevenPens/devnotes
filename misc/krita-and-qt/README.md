@@ -99,47 +99,9 @@ That happens **BEFORE QApplication is fully running**.
 
 ### Qt6 vs Qt5
 
-#### Qt6 - Modern approach
+Qt6 is new for Krita (starting in Krita 6.0 in March 2026).&#x20;
 
-Krita explicitly calls:
-
-```cpp
-QNativeInterface::QWindowsApplication::setWinTabEnabled(true/false)
-```
-
-* Clean, runtime-configurable (but still startup-only)
-* No need for application attributes
-
-***
-
-#### Qt5 - Legacy behavior
-
-Qt handled WinTab internally via:
-
-```cpp
-Qt::AA_MSWindowsUseWinTabAPI
-```
-
-Krita:
-
-* Checked if Qt actually enabled WinTab
-* Fell back to Windows Ink if it failed
-
-***
-
-### Alternative methods of selecting the pen input API
-
-Qt also supports forcing WinTab via:
-
-```
-QT_WINTAB_ENABLED=1
-```
-
-Or in code:
-
-```cpp
-qputenv("QT_WINTAB_ENABLED", "1");
-```
+The paths are slightly different for Qt6 and Qt6 with krita: See the [Implementation notes](../../implementation-notes/)
 
 ### QTabletEvent unified pen data
 
