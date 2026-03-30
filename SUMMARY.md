@@ -42,3 +42,5 @@
 ## MISC
 
 * [References](misc/references.md)
+* [Krita & Qt](misc/krita-and-qt/README.md)
+  * [Krita pen api implementation notes](misc/krita-and-qt/krita-pen-api-implementation-notes.md)
