@@ -18,6 +18,7 @@
   * [Framework Compatibility](pen-input-on-windows/pen-apis-compared/framework-compatibility.md)
   * [Hover / Proximity Behavior](pen-input-on-windows/pen-apis-compared/hover-proximity-behavior.md)
   * [Pen Orientation Data](pen-input-on-windows/pen-apis-compared/pen-orientation-data.md)
+* [WinTab vs WM\_POINTER](pen-input-on-windows/wintab-vs-wm_pointer.md)
 
 ***
 
@@ -45,3 +46,4 @@
 * [Krita & Qt](misc/krita-and-qt/README.md)
   * [Krita pen api implementation notes](misc/krita-and-qt/krita-pen-api-implementation-notes.md)
   * [Qt pen api implementation notes](misc/krita-and-qt/qt-pen-api-implementation-notes.md)
+  * [QTabletEvent](misc/krita-and-qt/qtabletevent.md)
