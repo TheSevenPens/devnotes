@@ -4,7 +4,10 @@
 
 Krita on Windows supports using either WinTab or Windoes Ink
 
-For more detail see the: [Implementation notes](krita-pen-api-implementation-notes.md)
+For more detail see:
+
+* &#x20;[Krita pen API implementation notes](krita-pen-api-implementation-notes.md)
+* [Qt pen api implementation notes](qt-pen-api-implementation-notes.md)&#x20;
 
 ### UX for Switching Pen APIs
 

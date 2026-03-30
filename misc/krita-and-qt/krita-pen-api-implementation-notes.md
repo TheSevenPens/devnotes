@@ -1,5 +1,11 @@
 # Krita pen api implementation notes
 
+### Overview
+
+This doc provides some details about what Krita does.
+
+Uf you want to see the Qt details: [Qt pen api implementation notes](qt-pen-api-implementation-notes.md)&#x20;
+
 ### The Krita → Qt → WinTab / WM\_POINTER path
 
 #### Krita side
@@ -24,52 +30,31 @@ Tablet Settings UI
   -> Krita tells Qt Windows backend whether WinTab should be enabled
 ```
 
-#### Qt side
-
-The key Qt pieces are:
-
-* `QNativeInterface::Private::QWindowsApplication` declares `isWinTabEnabled()` and `setWinTabEnabled(bool)`. ([Code Browser](https://codebrowser.dev/qt6/qtbase/src/gui/kernel/qguiapplication_p.h.html?utm_source=chatgpt.com))
-* In the Windows platform plugin, `QWindowsApplication::setWinTabEnabled()` is implemented by asking `QWindowsContext` to either `initTablet()` or `disposeTablet()`.
-* `QWindowsContext::initTablet()` creates `QWindowsTabletSupport`; `disposeTablet()` destroys it.
-
-#### WinTab inside Qt
-
-The WinTab implementation lives in:
-
-* `src/plugins/platforms/windows/qwindowstabletsupport.cpp`
-* plus the bundled WinTab headers mentioned by Qt’s attribution page: `src/3rdparty/wintab/pktdef.h` and `wintab.h`. ([Qt Documentation](https://doc.qt.io/qt-6/qtgui-attribution-wintab.html?utm_source=chatgpt.com))
-
-What that code does:
-
-1. Loads `wintab32.dll`
-2. Creates a hidden dummy window
-3. Opens a WinTab context with `WTOpenW`
-4. Receives `WT_PROXIMITY` and `WT_PACKET`
-5. Converts packet data into Qt tablet events via `QWindowSystemInterface::handleTabletEvent(...)`
-
-#### WM\_POINTER / Windows Pointer path inside Qt
-
-The Windows event dispatcher path in `qwindowscontext.cpp` includes `qwindowspointerhandler.h`, and routes `PointerEvent` / `NonClientPointerEvent` to `QWindowsPointerHandler::translatePointerEvent(...)`. Mouse events go through the same pointer handler’s mouse translation path.
-
-So, conceptually for WM\_POINTER:
+### Summary of Krita Qt6 flow
 
 ```
-WM_POINTER / Windows Ink
-  -> QWindowsPointerHandler
-  -> QWindowSystemInterface
-  -> QTabletEvent / Qt input events
+Krita startup
+  -> read config
+  -> forceWinTab = !useWin8PointerInput
+  -> QNativeInterface::Private::QWindowsApplication::setWinTabEnabled(forceWinTab)
+
+If forceWinTab is true:
+  -> QWindowsApplication::setWinTabEnabled(true)
+  -> QWindowsContext::initTablet()
+  -> QWindowsTabletSupport::create()
+  -> load wintab32.dll, create dummy window, open WinTab context
+  -> WT_PACKET / WT_PROXIMITY
+  -> QWindowSystemInterface::handleTabletEvent(...)
+  -> QTabletEvent to app
+
+If forceWinTab = false:
+  -> no WinTab tablet support object
+  -> normal Windows pointer path remains active
+  -> qwindowspointerhandler handles WM_POINTER-family input
+  -> Qt emits unified events to the app
 ```
 
-while while for WinTab:
-
-```
-WinTab
-  -> QWindowsTabletSupport
-  -> QWindowSystemInterface
-  -> QTabletEvent / Qt input events
-```
-
-### Minimal code that mimics Krita’s Qt 6 startup logic
+### Minimal code for Krita’s Qt6 flow
 
 Important note: This uses **Qt private API**. Krita can do that because it is willing to depend on Qt internals. For ordinary apps, this is not a stable public API. Krita’s own code is effectively doing that on Windows + Qt 6. ([GitHub](https://github.com/KDE/krita/blob/master/krita/main.cc))
 
@@ -179,30 +164,3 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 ```
-
-### Clean model of the exact Qt 6 flow
-
-This is the most accurate compact picture:
-
-```
-Krita startup
-  -> read config
-  -> forceWinTab = !useWin8PointerInput
-  -> QNativeInterface::Private::QWindowsApplication::setWinTabEnabled(forceWinTab)
-
-If true:
-  -> QWindowsApplication::setWinTabEnabled(true)
-  -> QWindowsContext::initTablet()
-  -> QWindowsTabletSupport::create()
-  -> load wintab32.dll, create dummy window, open WinTab context
-  -> WT_PACKET / WT_PROXIMITY
-  -> QWindowSystemInterface::handleTabletEvent(...)
-  -> QTabletEvent to app
-
-If false:
-  -> no WinTab tablet support object
-  -> normal Windows pointer path remains active
-  -> qwindowspointerhandler handles WM_POINTER-family input
-  -> Qt emits unified events to the app
-```
-
