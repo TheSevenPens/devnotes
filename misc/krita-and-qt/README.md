@@ -75,7 +75,7 @@ Initialization happens **BEFORE QApplication is fully running**.
 
 Qt6 is new for Krita (starting in Krita 6.0 in March 2026).&#x20;
 
-The paths are slightly different for Qt6 and Qt6 with krita: See the [Implementation notes](../../pen-input-on-windows/pen-input/implementation-notes/)
+The paths are slightly different for Qt6 and Qt6 with krita: See the [Implementation notes](../../pen-input-on-windows/implementation-notes/)
 
 ## Runtime detection of pen API
 

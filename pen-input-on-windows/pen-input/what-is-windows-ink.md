@@ -21,7 +21,7 @@ This checkbox controls whether the driver exposes the **WM\_POINTER** input path
 
 When someone says "turn off Windows Ink in your tablet driver," they mean: disable the WM\_POINTER path so only Wintab is active. This is a common troubleshooting step for drawing apps that have issues with WM\_POINTER input.
 
-See [Wintab and Windows Ink Coexistence](implementation-notes/wintab-vs-windows-ink-driver-conflict.md) for details.
+See [Wintab and Windows Ink Coexistence](../implementation-notes/wintab-vs-windows-ink-driver-conflict.md) for details.
 
 ### Windows Ink as a set of APIs
 
