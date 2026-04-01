@@ -2,13 +2,13 @@
 
 ## Overview
 
-| API                | Pressure type                        | Range                                                   | Normalization      |
-| ------------------ | ------------------------------------ | ------------------------------------------------------- | ------------------ |
-| Wintab             | `pkNormalPressure` (uint)            | 0 to device-specific max (query via `GetMaxPressure()`) | App divides by max |
-| WM\_POINTER        | `POINTER_PEN_INFO.pressure` (uint32) | 0–1024                                                  | Fixed range        |
-| WinUI PointerPoint | `Properties.Pressure` (float)        | 0.0–1.0                                                 | Pre-normalized     |
-| WPF StylusPoint    | `PressureFactor` (float)             | 0.0–1.0                                                 | Pre-normalized     |
-| RealTimeStylus     | `PACKET_PROPERTY.pkNormalPressure`   | Device-specific                                         | App normalizes     |
+| API                | Pressure type                        | Range                                                   | Normalization         |
+| ------------------ | ------------------------------------ | ------------------------------------------------------- | --------------------- |
+| Wintab             | `pkNormalPressure` (uint)            | 0 to device-specific max (query via `GetMaxPressure()`) | App divides by max    |
+| WM\_POINTER        | `POINTER_PEN_INFO.pressure` (uint32) | 0 to 1024                                               | App divides by 1024.0 |
+| WinUI PointerPoint | `Properties.Pressure` (float)        | 0.0 to 1.0                                              | Pre-normalized        |
+| WPF StylusPoint    | `PressureFactor` (float)             | 0.0 to 1.0                                              | Pre-normalized        |
+| RealTimeStylus     | `PACKET_PROPERTY.pkNormalPressure`   | Device-specific                                         | App normalizes        |
 
 ## Wintab: pkNormalPressure
 
