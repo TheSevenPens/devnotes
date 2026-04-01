@@ -33,7 +33,7 @@
     * [WM\_POINTER Event Coalescing](pen-input-on-windows/implementation-notes/wm-pointer-coalescing.md)
     * [WM\_POINTER Input Routing](pen-input-on-windows/implementation-notes/framework-pen-input-routing.md)
     * [Wintab Gotchas](pen-input-on-windows/implementation-notes/wintab-gotchas.md)
-    * [Converting Between Tilt Representations](pen-input-on-windows/implementation-notes/converting-between-tilt-representations.md)
+    * [Converting Between Tilt Representations](pen-input-on-windows/implementation-notes/tilt-representations.md)
 * [Rendering options for paint apps](rendering-for-pen-apps.md)
 * [Misc](misc/README.md)
   * [Krita & Qt](misc/krita-and-qt/README.md)

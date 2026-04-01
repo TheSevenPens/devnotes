@@ -1,26 +1,36 @@
-# Converting Between Azimuth/Altitude and TiltX/TiltY
+# Converting Between Tilt Representations
 
-## Why convert?
+## The situation
 
-Windows pen APIs report pen tilt in two different coordinate systems:
+There are two mathematically equicalent ways of representing pen tilt
+
+* Spherical coordinates - Azimuth and altitude
+* Cartesian tilt coordinates - Tilt X and Tilt X
+
+Depdnding on the Pen API you use, you will receive tilt coordinates in one of two tilt coordinate&#x20;
 
 * **Wintab** and **RealTimeStylus** use **Azimuth** and **Altitude** (spherical coordinates).
 * **WM\_POINTER**, **WinUI**, and **WPF** use **TiltX** and **TiltY** (Cartesian tilt).
 
-If your application needs to support multiple pen APIs, or if you're porting code written for one API to another, you'll need to convert between these two representations. For example, a drawing app that uses Wintab on one machine might need to produce the same brush behavior with WM\_POINTER data on another — and the tilt values it receives will be in completely different formats.
+## Which one is more useful
+
+For a drawing app, I think spherical coordinates are generally more useful because they map to an intuitive sense of how the brush is tilted.&#x20;
 
 ## Definitions and ranges
 
 All angles are in **degrees**.
 
-| Value    | Description                                                                 | Range             |
-| -------- | --------------------------------------------------------------------------- | ----------------- |
-| Azimuth  | Compass direction the pen is leaning toward, measured clockwise from North (positive Y) | 0 to 360          |
-| Altitude | Angle of the pen above the tablet surface (90 = perfectly upright)          | 0 to 90           |
-| TiltX    | Tilt of the pen along the X axis (left/right lean)                          | -90 to +90        |
-| TiltY    | Tilt of the pen along the Y axis (forward/backward lean)                    | -90 to +90        |
+| Value    | Description                                                                             | Range      |
+| -------- | --------------------------------------------------------------------------------------- | ---------- |
+| Azimuth  | Compass direction the pen is leaning toward, measured clockwise from North (positive Y) | 0 to 360   |
+| Altitude | Angle of the pen above the tablet surface (90 = perfectly upright)                      | 0 to 90    |
+| TiltX    | Tilt of the pen along the X axis (left/right lean)                                      | -90 to +90 |
+| TiltY    | Tilt of the pen along the Y axis (forward/backward lean)                                | -90 to +90 |
 
-**Note on Wintab**: Wintab reports azimuth and altitude in **tenths of a degree** (0–3600 and 0–900). Divide by 10.0 before using the conversions below.
+**Notes**:&#x20;
+
+* Wintab reports azimuth and altitude in **tenths of a degree** (0–3600 and 0–900). Divide by 10.0 before using the conversions below.
+* The reported values for tilt altitude should - according to the tablet specs be within 0deg to 60 deg. In practice I've found sometimes you might see a value like 64deg.
 
 ## C# conversion code
 
