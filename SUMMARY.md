@@ -23,6 +23,7 @@
     * [Pen Orientation Data](pen-input-on-windows/pen-apis-compared/pen-orientation-data.md)
     * [Multi-monitor](pen-input-on-windows/pen-apis-compared/multi-monitor.md)
     * [Threading](pen-input-on-windows/pen-apis-compared/threading.md)
+    * [Cursor follows pen](pen-input-on-windows/pen-apis-compared/cursor-follows-pen.md)
   * [Implementation notes](pen-input-on-windows/implementation-notes/README.md)
     * [Latency Implications](pen-input-on-windows/implementation-notes/latency-implications.md)
     * [Wintab and Windows Ink Coexistence](pen-input-on-windows/implementation-notes/wintab-vs-windows-ink-driver-conflict.md)
