@@ -2,17 +2,15 @@
 
 "Windows Ink" is one of the most overloaded terms in Windows pen input. It gets used casually to mean very different things depending on who's talking — a tablet driver developer, an app developer, or an end user. This causes real confusion when troubleshooting pen input issues or choosing an API.
 
-## The Three Meanings
-
-### 1. Windows Ink as a Marketing Brand
+### Windows Ink as a Marketing Brand
 
 Microsoft introduced "Windows Ink" as a brand name in Windows 10 Anniversary Update (2016). It was the umbrella term for pen-related features: the Windows Ink Workspace, Sticky Notes with handwriting, Screen Sketch, and handwriting recognition in text fields.
 
 In this sense, "Windows Ink" is not a specific API — it's a marketing name for "pen stuff in Windows." This is the meaning most end users encounter.
 
-### 2. Windows Ink as a Driver Setting
+### &#x20;Windows Ink as a Driver Setting
 
-In tablet driver configuration panels (Wacom, Huion, XP-Pen), there is typically a checkbox labeled **"Windows Ink"** or **"Enable Windows Ink."**
+In tablet driver UX (Wacom, Huion, XP-Pen, etc ), there is typically a checkbox labeled **"Windows Ink"** or **"Enable Windows Ink."**
 
 This checkbox controls whether the driver exposes the **WM\_POINTER** input path alongside Wintab:
 
@@ -25,7 +23,7 @@ When someone says "turn off Windows Ink in your tablet driver," they mean: disab
 
 See [Wintab and Windows Ink Coexistence](implementation-notes/wintab-vs-windows-ink-driver-conflict.md) for details.
 
-### 3. Windows Ink as a Set of APIs
+### Windows Ink as a set of APIs
 
 For developers, "Windows Ink" loosely refers to the modern pen input stack that Microsoft built as an alternative to Wintab:
 
@@ -37,15 +35,13 @@ For developers, "Windows Ink" loosely refers to the modern pen input stack that 
 
 None of these are literally called "Windows Ink API." There is no single API with that name. But when a developer says "our app uses Windows Ink," they typically mean one of the above — usually WM\_POINTER or the framework's pointer/stylus events.
 
-## Why This Matters
+## Examples of ambiguity
 
-The ambiguity causes real problems:
+* **"Does your app support Windows Ink?"** — This could mean: does the app use WM\_POINTER? Does it work when the driver's Windows Ink checkbox is enabled? Does it support the InkCanvas control?
+* **"Turn off Windows Ink in the driver to fix the lag"** — This means: disable the WM\_POINTER path in the tablet driver, forcing Wintab-only mode. It has nothing to do with Windows Ink Workspace or Sticky Notes.
+* **"We switched the app from Wintab to Windows Ink"** — This means: the app now uses WM\_POINTER (or a framework layer on top of it) instead of calling Wintab32.dll directly.
 
-* **"Does your app support Windows Ink?"** — This could mean: does it use WM\_POINTER? Does it work when the driver's Windows Ink checkbox is enabled? Does it support the InkCanvas control?
-* **"Turn off Windows Ink to fix the lag"** — This means: disable the WM\_POINTER path in the tablet driver, forcing Wintab-only mode. It has nothing to do with Windows Ink Workspace or Sticky Notes.
-* **"We switched from Wintab to Windows Ink"** — This means: the app now uses WM\_POINTER (or a framework layer on top of it) instead of calling Wintab32.dll directly.
-
-## The Practical Takeaway
+## Clarify when discussion
 
 When you encounter "Windows Ink" in a technical context, ask: **which meaning?**
 
@@ -57,3 +53,4 @@ When you encounter "Windows Ink" in a technical context, ask: **which meaning?**
 | App preferences ("Use Windows Ink") | The app will use WM\_POINTER instead of Wintab for pen input          |
 
 For API-level discussions, prefer the specific name: **WM\_POINTER**, **PointerPoint**, **StylusPoint**, or **InkCanvas** — not "Windows Ink."
+
