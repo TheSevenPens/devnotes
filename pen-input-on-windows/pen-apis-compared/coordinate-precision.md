@@ -13,6 +13,10 @@ But depending on the API you use, you may not have access to that high-resolutio
 
 But if you do want high-resolution - as it stands for a modern Windows application, WinTab is the only practical choice. Even then, be aware, you have to use configure WinTab to use its high-resolution mode (referred to as the "Digitizer Context" in WinTab terminology).
 
+<table data-full-width="true"><thead><tr><th>API</th><th>Coordinates</th><th>Precision</th></tr></thead><tbody><tr><td><strong>Wintab (System)</strong></td><td>Physical screen pixels</td><td>Screen resolution (~200 DPI)</td></tr><tr><td><strong>Wintab (Digitizer Hi-Res)</strong></td><td>Tablet native units</td><td>Tablet resolution (up to 5080+ LPI)</td></tr><tr><td><strong>WM_POINTER / WM_POINTERUPDATE</strong></td><td>Physical screen pixels</td><td>Screen resolution¹</td></tr><tr><td><strong>Windows Ink (WinUI PointerPoint)</strong></td><td>DIPs (device-independent pixels)</td><td>DIP resolution</td></tr><tr><td><strong>Windows Ink (WPF StylusPoint)</strong></td><td>WPF device-independent units</td><td>WPF layout resolution</td></tr><tr><td><strong>RealTimeStylus (COM)</strong></td><td>HIMETRIC (0.01mm)</td><td>Up to ~2540 DPI²</td></tr></tbody></table>
+
+
+
 ## Coordinate precision comparison
 
 The X ranges below are examples based on these assumptions:

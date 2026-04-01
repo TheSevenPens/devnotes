@@ -10,5 +10,4 @@ Depending on what you are trying to accomplish and which UX framework different 
 | Touch + pen discrimination           | WM\_POINTER                           | Designed for multi-input-type scenarios      |
 | Airbrush / barrel pressure           | Wintab                                | Only API exposing tangential pressure        |
 | Pen height above tablet              | Wintab                                | Only API exposing Z axis                     |
-| Full tilt as azimuth/altitude        | Wintab or RealTimeStylus              | Other APIs only provide X/Y tilt             |
 
