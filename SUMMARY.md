@@ -11,7 +11,7 @@
     * [Unifying Pen APIs with PenSession](pen-input-on-windows/pen-input/unifying-pen-apis-with-pensession/README.md "PenSession")
       * [PenSession Tilt handling](pen-input-on-windows/pen-input/unifying-pen-apis-with-pensession/pensession-tilt-handling.md "Tilt handling")
       * [Framework input routing](pen-input-on-windows/pen-input/unifying-pen-apis-with-pensession/framework-input-routing.md)
-  * [Pen APIs compared](pen-input-on-windows/pen-apis-compared.md)
+  * [Windows Pen APIs compared](pen-input-on-windows/pen-apis-compared.md)
   * [Implementation notes](pen-input-on-windows/implementation-notes/README.md)
     * [Latency Implications](pen-input-on-windows/implementation-notes/latency-implications.md)
     * [Wintab and Windows Ink Coexistence](pen-input-on-windows/implementation-notes/wintab-vs-windows-ink-driver-conflict.md)

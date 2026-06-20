@@ -1,8 +1,10 @@
-# Pen APIs compared
+# Windows Pen APIs compared
 
-This page compares the main Windows pen APIs across the features that matter most for drawing and handwriting apps.
+Here's a quick review of some of the differences between the APIs. This information will be useful if you are building an app or library that has to pick which API to use or switch between APIs.
 
 ### Z position
+
+Reminder: Z position is roughly equivalent "hover height"
 
 | API                | Z (height)            |
 | ------------------ | --------------------- |
@@ -14,6 +16,8 @@ This page compares the main Windows pen APIs across the features that matter mos
 
 ### Pressure data
 
+Pressure data comes back a bit differently. While 0 always means "no pressure", the data type, max value, and how many unique values vary. &#x20;
+
 | API                | Pressure type                        | Range                                                   | Normalization         |
 | ------------------ | ------------------------------------ | ------------------------------------------------------- | --------------------- |
 | Wintab             | `pkNormalPressure` (uint)            | 0 to device-specific max (query via `GetMaxPressure()`) | App divides by max    |
@@ -22,7 +26,7 @@ This page compares the main Windows pen APIs across the features that matter mos
 | WPF StylusPoint    | `PressureFactor` (float)             | 0.0 to 1.0                                              | Pre-normalized        |
 | RealTimeStylus     | `PACKET_PROPERTY.pkNormalPressure`   | Device-specific                                         | App normalizes        |
 
-In Wintab, `pkNormalPressure` does not mean normalized pressure. It means normal force. The value is the pressure applied perpendicular to the tablet surface. Normalize it by dividing by `GetMaxPressure()`.
+In Wintab, you might notice this field called `pkNormalPressure` does not mean normalized pressure (which typically means  a pressure from 0 to 1.0). pkNormalPressure means normal force as in the force applied perpendicular to the tablet surface. Normalize it by dividing by `GetMaxPressure()`.
 
 ### Coordinate precision
 
