@@ -24,7 +24,7 @@
     * [Converting Between Tilt Representations](pen-input-on-windows/implementation-notes/tilt-representations.md)
 * [Rendering options for paint apps](rendering-for-pen-apps.md)
 * [Misc](misc/README.md)
-  * [Krita & Qt](misc/krita-and-qt/README.md)
+  * [How Krita & Qt handles pen input](misc/krita-and-qt/README.md)
     * [Krita pen api implementation notes](misc/krita-and-qt/krita-pen-api-implementation-notes.md)
     * [Qt pen api implementation notes](misc/krita-and-qt/qt-pen-api-implementation-notes.md)
     * [QTabletEvent](misc/krita-and-qt/qtabletevent.md)
