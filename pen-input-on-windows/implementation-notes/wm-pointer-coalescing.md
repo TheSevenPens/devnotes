@@ -1,12 +1,12 @@
-# WM_POINTER Event Coalescing
+# WM\_POINTER Event Coalescing
 
-When using `WM_POINTER` for pen input on Windows, the OS may coalesce multiple pointer events into a single message. This causes visible quality loss in drawing applications.
+Windows may coelesce WM\_POINTER events into a single message and thus produce visible quality loss in drawing apps.&#x20;
 
 ## The Problem
 
-When the UI thread is busy (rendering, GPU texture upload, layout), Windows coalesces multiple `WM_POINTERUPDATE` messages into one. The most recent position is delivered, but intermediate positions are lost.
+When the UI thread is busy (rendering, layout, etc.), Windows coalesces multiple `WM_POINTERUPDATE` messages into one. The most recent position is delivered and intermediate positions are lost.
 
-**Symptoms:** Strokes appear as straight-line segments between widely spaced points — the classic "polygon" appearance instead of smooth curves. This is especially visible in apps with heavier render loops (e.g., egui/wgpu, Electron) and less visible in apps with lightweight message pumps (e.g., raw Win32/GDI).
+**Symptoms:** Strokes appear as straight-line segments between widely spaced points — the classic "polygon" appearance instead of smooth curves. This is often in apps with heavier render loops (e.g., Electron) and less visible in apps with lightweight message pumps (e.g., raw Win32/GDI).
 
 ## The Fix
 
@@ -29,16 +29,20 @@ GetPointerPenInfo(pointerId, &pen_info);
 process_point(pen_info);
 ```
 
-## Critical: `count > 1`, not `count > 0`
+## Important usage note: `count > 1`, not `count > 0`&#x20;
 
-When `GetPointerPenInfoHistory` returns `count == 1`, the data may differ from what `GetPointerPenInfo` returns for the same event. Using `count > 0` was found to break WM_POINTER completely in some apps — pen data silently stops arriving. Always fall through to `GetPointerPenInfo` for single events.
+When `GetPointerPenInfoHistory` returns `count == 1`, the data may differ from what `GetPointerPenInfo` returns for the same event.&#x20;
 
-This was discovered through debugging: using `count > 0` caused a Win32 scribble app to silently lose all WM_POINTER data. The `count == 1` history path consumed events without producing usable output. The fix is simple but the failure mode is silent — no errors, just no data.
+What I found: Using `count > 0` could break WM\_POINTER completely in some apps — pen data silently stops arriving. Always fall through to `GetPointerPenInfo` for single events.
 
-## Framework-Specific Sessions Are Not Affected
+This was discovered through debugging: using `count > 0` caused a Win32 scribble app to silently lose all WM\_POINTER data. The `count == 1` history path consumed events without producing usable output. The fix is simple but the failure mode is silent — no errors, just no data.
 
-WinUI 3, WPF, WinForms, and Avalonia decoalesce pointer events internally before delivering them to app event handlers. Their native input stacks handle history recovery transparently. Only raw Win32 `WM_POINTER` subclassing requires explicit history retrieval.
+## Some UI frameworks handle it automatically
+
+WinUI 3, WPF, WinForms, and Avalonia decoalesce pointer events internally before delivering them to app event handlers. Only raw Win32 `WM_POINTER` subclassing requires explicit history retrieval.
 
 ## Wintab Is Not Affected
+
+This coelescing does NOT affect WinTab.
 
 Wintab delivers packets on a dedicated background thread at 200+ Hz. The UI thread's busyness doesn't affect Wintab's packet delivery rate. This is one of the main reasons production drawing apps (Photoshop, Krita, Clip Studio Paint) prefer Wintab.

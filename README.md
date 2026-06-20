@@ -1,6 +1,6 @@
 # Developer Notes
 
-Notes on building drawing applications and creative technology on Windows. Covers pen input APIs, UI frameworks, rendering approaches, and hard-won lessons from building pen-enabled apps across multiple languages and frameworks.
+Notes on building drawing applications and creative technology on Windows. Covers pen input APIs, UI frameworks, rendering approaches, and observations from building pen-enabled apps across multiple languages and frameworks.
 
 ## Topics
 
