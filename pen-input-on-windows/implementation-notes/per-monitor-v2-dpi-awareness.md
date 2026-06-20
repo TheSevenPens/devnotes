@@ -1,7 +1,5 @@
 # Per-Monitor V2 DPI Awareness
 
-## Per-Monitor V2 DPI Awareness
-
 The term "Per-Monitor V2" is central to understanding coordinate handling in pen input applications on Windows. Here's what it means and why it matters.
 
 ### The DPI awareness spectrum

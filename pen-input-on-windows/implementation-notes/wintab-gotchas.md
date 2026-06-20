@@ -1,16 +1,16 @@
 # Wintab Gotchas
 
-Hard-won lessons from implementing Wintab pen input. These are the pitfalls that aren't obvious from the Wintab 1.4 specification.
+These are the pitfalls that aren't obvious from the Wintab 1.4 specification.
 
-## 1. CXO_SYSTEM is required for packet delivery
+## 1. CXO\_SYSTEM is required for packet delivery
 
 The Wacom driver requires `CXO_SYSTEM` in the context options for `WT_PACKET` messages to be delivered. Without it, `WTOpenA` succeeds and returns a valid context handle — but no packets ever arrive. This is not documented in the Wintab spec.
 
-## 2. Use WTI_DEFSYSCTX, not WTI_DEFCONTEXT
+## 2. Use WTI\_DEFSYSCTX, not WTI\_DEFCONTEXT
 
 `WTI_DEFCONTEXT` (digitizer context) may not deliver packets on some Wacom driver versions. Always use `WTI_DEFSYSCTX` (system context) as the base for both system and digitizer modes.
 
-## 3. Hidden window must not be HWND_MESSAGE
+## 3. Hidden window must not be HWND\_MESSAGE
 
 The Wacom driver doesn't deliver `WT_PACKET` to message-only windows (created with `HWND_MESSAGE` as parent). Use a regular hidden top-level window:
 
@@ -58,21 +58,23 @@ Setting `OutExtX/Y` to canvas dimensions breaks on multi-monitor setups. The Wac
 
 ## 9. Digitizer hi-res: override OutExt to tablet-native
 
-For tablet-native resolution (~5080 LPI vs ~200 DPI screen):
+For tablet-native resolution (\~5080 LPI vs \~200 DPI screen):
+
 1. Override `OutOrg/OutExt` to `InOrg/InExt` (tablet-native range)
 2. Cache the system context's `InOrg/InExt → SysOrg/SysExt` mapping
 3. Convert via `ScaleAxis` through the cached mapping
 4. Negate `SysExtY` for Y-axis inversion
 
-## 10. Wintab/WM_POINTER driver conflict
+## 10. Wintab/WM\_POINTER driver conflict
 
-Some tablet drivers suppress WM_POINTER pen events once Wintab32.dll is loaded or a Wintab context has been opened. In practice, switching between Wintab and WM_POINTER sessions works when sessions are cleanly stopped/started, but this is driver-dependent.
+Some tablet drivers suppress WM\_POINTER pen events once Wintab32.dll is loaded or a Wintab context has been opened. In practice, switching between Wintab and WM\_POINTER sessions works when sessions are cleanly stopped/started, but this is driver-dependent.
 
 ## 11. Button encoding is relative, not bitmask
 
 Wintab encodes button events as `(action << 16) | buttonNumber`:
-- Action: 0=none, 1=released, 2=pressed
-- Button: 0=tip, 1=barrel1, 2=barrel2, 3=barrel3
+
+* Action: 0=none, 1=released, 2=pressed
+* Button: 0=tip, 1=barrel1, 2=barrel2, 3=barrel3
 
 This is NOT a bitmask — you can't AND it to check button state.
 

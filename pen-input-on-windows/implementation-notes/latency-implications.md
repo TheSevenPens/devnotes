@@ -1,7 +1,5 @@
 # Latency Implications
 
-## Latency Implications
-
 The threading model affects pen-to-pixel latency:
 
 | API                | Delivery thread          | Typical frequency   | Latency characteristics                                                                                     |

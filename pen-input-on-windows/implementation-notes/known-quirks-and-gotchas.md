@@ -1,8 +1,8 @@
 # Known Quirks and Gotchas
 
-## Known Quirks and Gotchas
-
 ### Wintab
+
+For more details see: [Wintab gotchas](wintab-gotchas.md)
 
 * **CXO\_SYSTEM required** for Wacom driver packet delivery — without it, context opens but no packets arrive
 * **Multi-monitor:** custom `OutExt` is clipped by the driver's tablet-to-monitor mapping; use system context output range or tablet-native with ScaleAxis conversion
