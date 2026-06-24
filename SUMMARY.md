@@ -1,6 +1,7 @@
 # Table of contents
 
 * [Developer Notes](README.md)
+  * [Pen input APIs](readme/pen-input-apis.md)
 * [Pen input on Windows](pen-input-on-windows/README.md)
   * [Overview](pen-input-on-windows/pen-input/README.md)
     * [Challenges developing pen-aware applications](pen-input-on-windows/pen-input/challenges-developing-pen-aware-applications.md)
@@ -28,4 +29,10 @@
     * [Krita pen api implementation notes](misc/krita-and-qt/krita-pen-api-implementation-notes.md)
     * [Qt pen api implementation notes](misc/krita-and-qt/qt-pen-api-implementation-notes.md)
     * [QTabletEvent](misc/krita-and-qt/qtabletevent.md)
+  * [Thoughts on WinTab vs WM\_POINTER](misc/thoughts-on-wintab-vs-wm_pointer.md)
+  * [WinTab resouces](misc/wintab-resouces.md)
+  * [HTML pointer events](misc/html-pointer-events.md)
+  * [Tools and libraries](misc/tools-and-libraries.md)
+  * [SDKs](misc/sdks.md)
+  * [Hardware projects](misc/hardware-projects.md)
 * [References](references.md)
