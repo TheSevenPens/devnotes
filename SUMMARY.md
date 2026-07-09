@@ -24,6 +24,7 @@
     * [WM\_POINTER Input Routing](pen-input-on-windows/implementation-notes/framework-pen-input-routing.md)
     * [Wintab Gotchas](pen-input-on-windows/implementation-notes/wintab-gotchas.md)
     * [Converting Between Tilt Representations](pen-input-on-windows/implementation-notes/tilt-representations.md)
+  * [Sample apps to build](pen-input-on-windows/sample-apps-to-build.md)
 * [Rendering options for paint apps](rendering-for-pen-apps.md)
 * [Misc](misc/README.md)
   * [How Krita & Qt handles pen input](misc/krita-and-qt/README.md)

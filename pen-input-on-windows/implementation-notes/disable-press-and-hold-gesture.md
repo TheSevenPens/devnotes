@@ -110,6 +110,34 @@ private static IntPtr WndProcHook(IntPtr hWnd, uint msg, IntPtr w, IntPtr l, ref
 }
 ```
 
+## The other half: the cursor reappears at the dwell
+
+Disabling the gesture stops the ring and the right-click — but you may find the **mouse cursor still
+pops back in** partway through a long hold (for us, right at the ~1 s press-and-hold dwell). It's the same
+interaction's other half:
+
+- At the dwell, Windows decides the (now gesture-disabled) stationary contact is ordinary
+  **mouse-emulated** input and **re-asserts the mouse cursor**.
+- Crucially, because the pen is held *still*, **no `WM_MOUSEMOVE`/`WM_SETCURSOR` follows** — so your
+  per-window "hidden" cursor is never re-applied, and the cursor **sticks visible** for the rest of the
+  hold. (A cursor hidden by setting the window class/instance cursor is only re-applied on the next
+  `WM_SETCURSOR`, which a motionless pen never triggers.)
+
+Fixes, in increasing completeness:
+
+1. **`SetWindowFeedbackSetting`** to turn off `FEEDBACK_PEN_PRESSANDHOLD` (see below). Helps with the
+   feedback, but on its own it did **not** stop the cursor re-assertion for us.
+2. **Re-hide the cursor during the hold** — `SetCursor(NULL)` on a timer (e.g. per animation frame while
+   the user is holding). Simple and effective, but leaves a possible **sub-frame flicker** at the dwell:
+   Windows shows the cursor, your next tick hides it, so it can blink in for a frame or two.
+3. **Handle `WM_SETCURSOR`** in the WndProc and set a null cursor (`SetCursor(NULL)`), returning `TRUE`.
+   This is the zero-flicker version: you answer *every* time Windows asks what cursor to show over your
+   window, so there's never a frame where it draws the arrow. Prefer this if the flicker matters.
+
+Note: `SetCursor(NULL)` hides the cursor for the calling thread while the pointer is over a window that
+thread owns — fine for a foreground full-screen overlay. Scope it to *while holding* so normal cursor
+behavior (and your clickable panel/buttons) returns when the user isn't holding.
+
 ## Alternative / complement — `SetWindowFeedbackSetting`
 
 `SetWindowFeedbackSetting(hwnd, FEEDBACK_TYPE, 0, sizeof(BOOL), &FALSE)` turns off the **visual**
