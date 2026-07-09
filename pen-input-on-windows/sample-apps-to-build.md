@@ -24,12 +24,14 @@ verified answer back into the corresponding note. Iterate in the sample, not in 
 
 ## Backlog (seed from the implementation notes)
 
+- **Tap / contact feedback rings** — the ripple the shell draws on every pen/touch tap. Pure cosmetic;
+  `SetWindowFeedbackSetting` per `FEEDBACK_TYPE`. ([note](implementation-notes/disable-shell-pen-feedback.md))
 - **Press-and-hold gesture** — the ring + right-click on a stationary contact.
   `WM_TABLET_QUERYSYSTEMGESTURESTATUS` → `TABLET_DISABLE_PRESSANDHOLD`.
-  ([note](implementation-notes/disable-press-and-hold-gesture.md))
+  ([note](implementation-notes/disable-shell-pen-feedback.md))
 - **Cursor reappears during a still hold** — the dwell's "other half"; no mouse-move to re-apply a hidden
   cursor. Compare `SetWindowFeedbackSetting`, `SetCursor(NULL)` on a timer, and handling `WM_SETCURSOR`
-  (the zero-flicker one). ([note](implementation-notes/disable-press-and-hold-gesture.md))
+  (the zero-flicker one). ([note](implementation-notes/disable-shell-pen-feedback.md))
 - **Hiding the cursor over a full-screen pen window** for *all* input types, without breaking clickable
   chrome.
 - **DPI & pen coordinate mapping** — Per-Monitor V2, `ClientToScreen` from the right awareness context.

@@ -17,7 +17,7 @@
     * [Latency Implications](pen-input-on-windows/implementation-notes/latency-implications.md)
     * [Wintab and Windows Ink Coexistence](pen-input-on-windows/implementation-notes/wintab-vs-windows-ink-driver-conflict.md)
     * [Known Quirks and Gotchas](pen-input-on-windows/implementation-notes/known-quirks-and-gotchas.md)
-    * [Disabling Press-and-Hold (Right-Click)](pen-input-on-windows/implementation-notes/disable-press-and-hold-gesture.md)
+    * [Disabling Shell Pen/Touch Feedback & Gestures](pen-input-on-windows/implementation-notes/disable-shell-pen-feedback.md)
     * [DPI and Pen Coordinates](pen-input-on-windows/implementation-notes/dpi-and-pen-coordinates.md)
     * [Per-Monitor V2 DPI Awareness](pen-input-on-windows/implementation-notes/per-monitor-v2-dpi-awareness.md)
     * [WM\_POINTER Event Coalescing](pen-input-on-windows/implementation-notes/wm-pointer-coalescing.md)
