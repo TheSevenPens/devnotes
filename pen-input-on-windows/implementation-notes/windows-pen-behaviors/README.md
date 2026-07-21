@@ -1,4 +1,20 @@
 # Windows pen behaviors
 
-Windows pen input causes all sorts of weird behaviors if you are used to how pen should behave from a historical or artistic perspective. These behaviors are intended to help the user, but in practice irritate them or are inappropriate in many contexts. This document needs to (1) clearly identify the behavior (2) explain how to disable them programmatically. Ideally someone writing a windows application that is focused on drawing will simply follow a simple "recipe" to get the pen working as expected.
+There are two sets of thing Windows does that is special when a pen is involved:
 
+* It shows visual feedback
+* It enables new system gestures
+
+| What you see                                                     | Type                           |
+| ---------------------------------------------------------------- | ------------------------------ |
+| Ripple ring on every **tap - this is called "Dynamic feedback"** | **Visual feedback** (cosmetic) |
+| Press-and-hold **ring** animation                                | **Visual feedback** (cosmetic) |
+| Press-and-hold **right-click** (the behavior)                    | **System gesture**             |
+
+The reason why it does this - is historical and I won't cover it here. But in short Microsoft has for decades tried to incorporate a seamless experience with touch and pen input as part of what it original called the "Tablet PC" concept.
+
+The intention is noble, the execution is problematic. Very problematic for artists.
+
+These visual effects and feedback are largely unwelcome by artists because they are (1) distracting , (2) actively interfere with drawing and (3) cause issues when interacting with interface elements such as sliders.&#x20;
+
+In this section we will clearly identify these behaviors, and show how to disable them programmatically to ensure.
