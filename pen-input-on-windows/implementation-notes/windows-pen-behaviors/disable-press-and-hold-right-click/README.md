@@ -97,7 +97,7 @@ static IntPtr Hook(IntPtr h, uint msg, IntPtr w, IntPtr l, ref bool handled)
 
 ### Related behavior
 
-Visual feedback and gestures use separate mechanisms. [Disable visual feedback](disable-pen-and-touch-feedback.md) when you only need to remove contact rings.
+Visual feedback and gestures use separate mechanisms. [Disable visual feedback](../disable-pen-and-touch-feedback.md) when you only need to remove contact rings.
 
 ### Reference
 

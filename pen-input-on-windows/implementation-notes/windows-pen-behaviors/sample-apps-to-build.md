@@ -16,9 +16,9 @@ The efficient approach is a set of **minimal, single-purpose sample apps** — o
 
 ## Backlog (seed from the implementation notes)
 
-* **Tap / contact feedback rings** — the ripple the shell draws on every pen/touch tap. Pure cosmetic; `SetWindowFeedbackSetting` per `FEEDBACK_TYPE`. ([note](disable-shell-pen-feedback/))
-* **Press-and-hold gesture** — the ring + right-click on a stationary contact. `WM_TABLET_QUERYSYSTEMGESTURESTATUS` → `TABLET_DISABLE_PRESSANDHOLD`. ([note](disable-shell-pen-feedback/))
-* **Cursor reappears during a still hold** — the dwell's "other half"; no mouse-move to re-apply a hidden cursor. Compare `SetWindowFeedbackSetting`, `SetCursor(NULL)` on a timer, and handling `WM_SETCURSOR` (the zero-flicker one). ([note](disable-shell-pen-feedback/))
+* **Tap / contact feedback rings** — the ripple the shell draws on every pen/touch tap. Pure cosmetic; `SetWindowFeedbackSetting` per `FEEDBACK_TYPE`. ([note](disable-shell-pen-feedback.md))
+* **Press-and-hold gesture** — the ring + right-click on a stationary contact. `WM_TABLET_QUERYSYSTEMGESTURESTATUS` → `TABLET_DISABLE_PRESSANDHOLD`. ([note](disable-shell-pen-feedback.md))
+* **Cursor reappears during a still hold** — the dwell's "other half"; no mouse-move to re-apply a hidden cursor. Compare `SetWindowFeedbackSetting`, `SetCursor(NULL)` on a timer, and handling `WM_SETCURSOR` (the zero-flicker one). ([note](disable-shell-pen-feedback.md))
 * **Hiding the cursor over a full-screen pen window** for _all_ input types, without breaking clickable chrome.
 * **DPI & pen coordinate mapping** — Per-Monitor V2, `ClientToScreen` from the right awareness context. ([note](../dpi-and-pen-coordinates.md), [note](../per-monitor-v2-dpi-awareness.md))
 * **WM\_POINTER coalescing** — retrieving the full input history vs the single current point. ([note](../wm-pointer-coalescing.md))

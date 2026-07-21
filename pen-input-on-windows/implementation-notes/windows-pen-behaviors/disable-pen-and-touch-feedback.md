@@ -48,8 +48,8 @@ You can apply visual-feedback suppression app-wide. It does not disable press-an
 
 ### Related behavior
 
-* [Disable press-and-hold right-click](disable-press-and-hold-right-click.md)
-* [Hide the cursor during a hold](hide-the-cursor-during-a-pen-hold.md)
+* [Disable press-and-hold right-click](disable-press-and-hold-right-click/)
+* [Hide the cursor during a hold](disable-press-and-hold-right-click/hide-the-cursor-during-a-pen-hold.md)
 
 ### References
 

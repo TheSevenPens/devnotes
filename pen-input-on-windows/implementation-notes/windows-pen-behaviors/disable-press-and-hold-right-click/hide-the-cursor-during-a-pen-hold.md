@@ -33,5 +33,5 @@ Scope this behavior to the hold. Restore normal cursor behavior afterward. This 
 
 ### Related behavior
 
-* [Disable visual feedback](disable-pen-and-touch-feedback.md)
-* [Disable press-and-hold right-click](disable-press-and-hold-right-click.md)
+* [Disable visual feedback](../disable-pen-and-touch-feedback.md)
+* [Disable press-and-hold right-click](./)
