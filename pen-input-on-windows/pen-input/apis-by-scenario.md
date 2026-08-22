@@ -1,7 +1,5 @@
 # APIs by scenario
 
-Depending on what you are trying to accomplish and which UX framework different APIs may be the right choice for you.
-
 | Scenario                             | Recommended API                       | Why                                          |
 | ------------------------------------ | ------------------------------------- | -------------------------------------------- |
 | Maximum tablet precision for drawing | Wintab using Digitizer context        | Only API that preserves full tablet LPI      |

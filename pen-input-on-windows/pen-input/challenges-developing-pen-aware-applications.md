@@ -1,4 +1,4 @@
-# Challenges developing pen-aware applications on windows
+# Challenges developing pen-aware applications on Windows
 
 ## Lots of APIs
 
@@ -16,16 +16,21 @@ Another complication of the windows system is that normally this windows itself 
 
 ## UI frameworks
 
-Furthermore if you're familiar with windows you probably know that windows has evolved different UI frameworks over time. You can work at the very lowest level – aka the win32 level - or you can work through libraries such as MFC, or entire UI frameworks such as WinFforms or XAML or WINUI3 or Avalonia. And it turns out that the choice of framework affects which APIs you need to work with.
+Furthermore if you're familiar with windows you probably know that windows has evolved different UI frameworks over time. You can work at the very lowest level – aka the win32 level - or you can work through libraries such as MFC, or entire UI frameworks such as WinForms or XAML or WINUI3 or Avalonia. The choice of framework affects which APIs you need to work with.
 
-Guidance is completely missing. Which API works in what situation, pros and cons, trade-offs, non obvious things you'll eventually have to deal with - none of these things is comprehensively explained or even listed.
+Guidance is mostly missing:
+
+* Which API works in what situation
+* pros and cons,&#x20;
+* trade-offs
+* non obvious things you'll eventually have to deal with
 
 ## An attempt at clarification
 
 So these docs are my attempt at sharing what I've learned.
 
-The sources of my learning include:
+The doc builds upon
 
 * Hand-crafting applications that use some of these APIs
 * Discussions with and feedback from tablet enthusiasts
-* A great deal of AI assistance.&#x20;
+* A great deal of AI assistance in building apps that excercise the APIs. This was most helpful in cases when I am familiar with some frameworks (WIN32, WinForms) but not experienced in others (WPF, Avalonia).

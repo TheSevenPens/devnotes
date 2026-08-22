@@ -11,5 +11,5 @@
 #### WinTab API
 
 * Third-party API (`wintab32.dll`)
-* CON: Each tablet brand has their own wintab32.dll and they install it so that they ovewrite the previous dll. On Windows can't really use multiple tablet brands simultaneously.&#x20;
+* CON: Each tablet brand has their own wintab32.dll and they install it so that they overwrite the previous dll. On Windows can't really use multiple tablet brands simultaneously.&#x20;
 * PRO: Can be used to provide much higher-resolution coordinates than WM\_POINTER.
