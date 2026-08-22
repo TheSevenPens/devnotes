@@ -4,7 +4,7 @@ Here's a quick review of some of the differences between the APIs. This informat
 
 ### Z position
 
-Reminder: Z position is roughly equivalent "hover height"
+Z position is roughly equivalent "hover height"
 
 | API                | Z (height)            |
 | ------------------ | --------------------- |
@@ -18,15 +18,15 @@ Reminder: Z position is roughly equivalent "hover height"
 
 Pressure data comes back a bit differently. While 0 always means "no pressure", the data type, max value, and how many unique values vary. &#x20;
 
-| API                | Pressure type                        | Range                                                   | Normalization         |
-| ------------------ | ------------------------------------ | ------------------------------------------------------- | --------------------- |
-| Wintab             | `pkNormalPressure` (uint)            | 0 to device-specific max (query via `GetMaxPressure()`) | App divides by max    |
-| WM\_POINTER        | `POINTER_PEN_INFO.pressure` (uint32) | 0 to 1024                                               | App divides by 1024.0 |
-| WinUI PointerPoint | `Properties.Pressure` (float)        | 0.0 to 1.0                                              | Pre-normalized        |
-| WPF StylusPoint    | `PressureFactor` (float)             | 0.0 to 1.0                                              | Pre-normalized        |
-| RealTimeStylus     | `PACKET_PROPERTY.pkNormalPressure`   | Device-specific                                         | App normalizes        |
+| API                | Pressure type                        | Range                                                                         | Normalization         |
+| ------------------ | ------------------------------------ | ----------------------------------------------------------------------------- | --------------------- |
+| Wintab             | `pkNormalPressure` (uint)            | 0 to device-specific max (get the device-specific max via `GetMaxPressure()`) | App divides by max    |
+| WM\_POINTER        | `POINTER_PEN_INFO.pressure` (uint32) | 0 to 1024                                                                     | App divides by 1024.0 |
+| WinUI PointerPoint | `Properties.Pressure` (float)        | 0.0 to 1.0                                                                    | Pre-normalized        |
+| WPF StylusPoint    | `PressureFactor` (float)             | 0.0 to 1.0                                                                    | Pre-normalized        |
+| RealTimeStylus     | `PACKET_PROPERTY.pkNormalPressure`   | Device-specific                                                               | App normalizes        |
 
-In Wintab, you might notice this field called `pkNormalPressure` does not mean normalized pressure (which typically means  a pressure from 0 to 1.0). pkNormalPressure means normal force as in the force applied perpendicular to the tablet surface. Normalize it by dividing by `GetMaxPressure()`.
+In Wintab, you might notice this field is called `pkNormalPressure` . The "Normal" part does not mean normalized pressure (a pressure from 0 to 1.0). pkNormalPressure means the "normal" means the force applied perpendicular to the tablet surface. Normalize it into the range 0.0 to 1.0 by dividing the value by `GetMaxPressure()`.
 
 ### Coordinate precision
 

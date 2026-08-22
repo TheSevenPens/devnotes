@@ -1,8 +1,6 @@
-# Rendering Approaches for Pen/Drawing Apps
+# Rendering options for paint apps
 
-Choosing the right rendering approach is critical for drawing application performance. This article compares options across Windows UI frameworks.
-
-## The Key Decision: Retained vs Bitmap-Backed
+## Retained vs Bitmap-Backed
 
 **Retained mode** (XAML Line elements, SVG paths): Each stroke segment becomes an object in the framework's visual tree. Simple to implement, but performance degrades as stroke count grows — layout and rendering slow down with thousands of elements.
 
@@ -10,14 +8,14 @@ Choosing the right rendering approach is critical for drawing application perfor
 
 ## Bitmap-Backed Rendering Options
 
-| Renderer | Type | Frameworks | Binary size | Notes |
-|---|---|---|---|---|
-| **SkiaSharp** | CPU (can use GPU) | .NET (WinUI, WPF, WinForms, Avalonia) | ~8 MB | Cross-platform, consistent. The practical default for .NET drawing apps. |
-| **tiny-skia** | CPU only | Rust | ~200 KB | Pure Rust, no C/C++ deps. Subset of Skia's CPU path. |
-| **Win2D** | GPU | WinUI 3 | ~3 MB | Microsoft's Direct2D wrapper. GPU-accelerated but WinUI-only. |
-| **GDI** | CPU | Win32 | 0 (built-in) | Fast for simple strokes. No anti-aliasing without GDI+. |
-| **Direct2D** | GPU | Win32, WPF (via D3DImage) | 0 (built-in) | Best performance. More setup complexity. |
-| **Blend2D** | CPU (SIMD) | C/C++ | ~1-2 MB | SIMD-optimized, often faster than Skia's CPU path. |
+| Renderer      | Type              | Frameworks                            | Binary size  | Notes                                                                    |
+| ------------- | ----------------- | ------------------------------------- | ------------ | ------------------------------------------------------------------------ |
+| **SkiaSharp** | CPU (can use GPU) | .NET (WinUI, WPF, WinForms, Avalonia) | \~8 MB       | Cross-platform, consistent. The practical default for .NET drawing apps. |
+| **tiny-skia** | CPU only          | Rust                                  | \~200 KB     | Pure Rust, no C/C++ deps. Subset of Skia's CPU path.                     |
+| **Win2D**     | GPU               | WinUI 3                               | \~3 MB       | Microsoft's Direct2D wrapper. GPU-accelerated but WinUI-only.            |
+| **GDI**       | CPU               | Win32                                 | 0 (built-in) | Fast for simple strokes. No anti-aliasing without GDI+.                  |
+| **Direct2D**  | GPU               | Win32, WPF (via D3DImage)             | 0 (built-in) | Best performance. More setup complexity.                                 |
+| **Blend2D**   | CPU (SIMD)        | C/C++                                 | \~1-2 MB     | SIMD-optimized, often faster than Skia's CPU path.                       |
 
 ## The SkiaSharp Pattern (Recommended for .NET)
 
@@ -30,12 +28,12 @@ All managed drawing apps can use the same rendering approach:
 
 The pixel-copy step varies by framework:
 
-| Framework | Copy method |
-|---|---|
-| WinUI 3 | `IBuffer.AsStream()` (from `System.Runtime.InteropServices.WindowsRuntime`) |
-| WPF | `Buffer.MemoryCopy` to `WriteableBitmap.BackBuffer` |
-| WinForms | `Buffer.MemoryCopy` via `Bitmap.LockBits` |
-| Avalonia | `Buffer.MemoryCopy` to `WriteableBitmap.Lock()` framebuffer |
+| Framework | Copy method                                                                 |
+| --------- | --------------------------------------------------------------------------- |
+| WinUI 3   | `IBuffer.AsStream()` (from `System.Runtime.InteropServices.WindowsRuntime`) |
+| WPF       | `Buffer.MemoryCopy` to `WriteableBitmap.BackBuffer`                         |
+| WinForms  | `Buffer.MemoryCopy` via `Bitmap.LockBits`                                   |
+| Avalonia  | `Buffer.MemoryCopy` to `WriteableBitmap.Lock()` framebuffer                 |
 
 ### WinUI 3 IBuffer Note
 
@@ -45,20 +43,20 @@ In WinUI 3 with CsWinRT 2.x (.NET 10 + Windows App SDK 1.7+), the old `[ComImpor
 
 From testing across frameworks:
 
-| App | Renderer | Smoothness |
-|---|---|---|
-| Win32/GDI (BitBlt) | GDI | Smoothest — direct blit, no framework overhead |
-| WinUI 3 (SkiaSharp) | SKBitmap → WriteableBitmap | Smooth |
-| Avalonia (SkiaSharp) | SKBitmap → WriteableBitmap | Smooth |
-| WinForms (SkiaSharp) | SKBitmap → Bitmap | Smooth |
-| WPF (SkiaSharp) | SKBitmap → WriteableBitmap | Slight stutter |
-| egui/Rust (tiny-skia) | Pixmap → egui texture | Smooth |
+| App                   | Renderer                   | Smoothness                                     |
+| --------------------- | -------------------------- | ---------------------------------------------- |
+| Win32/GDI (BitBlt)    | GDI                        | Smoothest — direct blit, no framework overhead |
+| WinUI 3 (SkiaSharp)   | SKBitmap → WriteableBitmap | Smooth                                         |
+| Avalonia (SkiaSharp)  | SKBitmap → WriteableBitmap | Smooth                                         |
+| WinForms (SkiaSharp)  | SKBitmap → Bitmap          | Smooth                                         |
+| WPF (SkiaSharp)       | SKBitmap → WriteableBitmap | Slight stutter                                 |
+| egui/Rust (tiny-skia) | Pixmap → egui texture      | Smooth                                         |
 
 WPF has the most rendering overhead due to its compositor layer between the WriteableBitmap and the display.
 
 ## Further Optimization Options
 
-- **Dirty-region copying** — only copy the bounding box of new strokes to the WriteableBitmap
-- **SkiaSharp native controls** — `SKElement` (WPF) or `SKXamlCanvas` (WinUI) bypass WriteableBitmap entirely
-- **`CompositionTarget.Rendering`** (WPF) — frame-synchronized timer instead of `DispatcherTimer`
-- **Direct2D interop** (WPF) — GPU-accelerated via `D3DImage`, no pixel copying
+* **Dirty-region copying** — only copy the bounding box of new strokes to the WriteableBitmap
+* **SkiaSharp native controls** — `SKElement` (WPF) or `SKXamlCanvas` (WinUI) bypass WriteableBitmap entirely
+* **`CompositionTarget.Rendering`** (WPF) — frame-synchronized timer instead of `DispatcherTimer`
+* **Direct2D interop** (WPF) — GPU-accelerated via `D3DImage`, no pixel copying
