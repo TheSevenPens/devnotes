@@ -20,5 +20,5 @@ These visual effects and feedback are largely unwelcome by artists because they 
 In this section we will clearly identify these behaviors, and show how to disable them programmatically.
 
 {% hint style="info" %}
-**Before you try to disable anything, check the baseline.** Whether Windows even _produces_ these behaviors depends on system-wide settings and on the input device — an indirect pen tablet often doesn't drive the shell feedback at all. See [Windows pen & touch settings](windows-pen-touch-settings.md). Working, toggleable demo apps for every behavior in this section live in the [sample apps](/broken/pages/Id6XMACmcVWx2WQDRWrw).
+**Before you try to disable anything, check the baseline.** Whether Windows even _produces_ these behaviors depends on system-wide settings and on the input device — an indirect pen tablet often does not cause Windows to show shell feedback at all. See [Windows pen & touch settings](windows-pen-touch-settings.md). Working, toggleable demo apps for every behavior in this section live in the [sample apps](/broken/pages/Id6XMACmcVWx2WQDRWrw).
 {% endhint %}
