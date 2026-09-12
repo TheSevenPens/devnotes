@@ -27,5 +27,5 @@ For more details see: [Wintab gotchas](wintab-gotchas.md)
 ### RealTimeStylus
 
 * **COM-based:** requires interop boilerplate in .NET
-* **Deprecated in spirit:** Microsoft hasn't invested in it since Windows 7; WM\_POINTER is the successor
+* **Still ships, no longer developed:** Microsoft has not changed RealTimeStylus since Windows 7; WM\_POINTER is the successor
 * **Plugin model:** sync plugins run on the pen thread (low latency), async plugins run on the UI thread

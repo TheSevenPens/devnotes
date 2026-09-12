@@ -12,7 +12,7 @@ Windows treats the stationary contact as mouse-emulated input. A motionless pen 
 
 ### Choose an approach
 
-1. Disable `FEEDBACK_PEN_PRESSANDHOLD`. This removes feedback but may not stop cursor re-assertion.
+1. Disable `FEEDBACK_PEN_PRESSANDHOLD`. This removes feedback but may not stop Windows from showing the cursor again.
 2. Call `SetCursor(NULL)` during the hold. A timer can re-hide it each animation frame. This can show a brief flicker.
 3. Handle `WM_SETCURSOR`. Set the null cursor and return `TRUE`. This prevents the visible frame.
 

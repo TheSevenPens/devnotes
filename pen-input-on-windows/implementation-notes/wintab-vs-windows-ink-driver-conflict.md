@@ -41,7 +41,7 @@ The Windows Ink toggle in the tablet driver can be changed at any time without r
 
 When switching input APIs in an application, a restart is strongly recommended — even for apps that claim it isn't needed. Most applications behave unpredictably if the input API changes mid-session because:
 
-- Driver-level plumbing is set up at process startup
+- Driver handles and API bindings are created at process startup
 - Framework input stacks (WPF's Wisp, WinUI's composition layer) initialize once
 - Cached state (context handles, function pointers, message routing) may become invalid
 

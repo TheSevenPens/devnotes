@@ -5,7 +5,7 @@
 The per-window fixes in this section (feedback, press-and-hold, cursor) assume the behavior is actually happening. But whether Windows produces it at all depends on two things **outside your window**:
 
 1. **Global visualization settings** — system-wide toggles for pen/touch feedback.
-2. **The input device** — a direct-touch pen/screen and an indirect tablet do not drive the Windows Ink shell the same way.
+2. **The input device** — a direct-touch pen/screen and an indirect tablet do not cause the same Windows Ink shell feedback.
 
 If a setting is off, or the pen is an indirect device, you can see **no symptom to fix** — and mistake "the shell never produced it" for "my fix worked". A test app should read and display these live so the baseline is visible.
 
@@ -52,7 +52,7 @@ SystemParametersInfoW(SPI_GETPENARBITRATIONTYPE,   0, &arb,     0);
 | `NID_READY` `0x80`            | a digitizer is ready                    |
 
 {% hint style="warning" %}
-**An `ExternalPen` (indirect tablet, or a pen routed through WinTab / OpenTabletDriver) frequently does&#x20;**_**not**_**&#x20;drive the Windows Ink shell feedback and press-and-hold** the way a direct-touch pen/screen does — **even with every visualization setting ON**. On such a device you draw fine (pointer input arrives) but see no contact ring and no press-and-hold gesture. So "RAW shows no rings" can mean _the device never drove the shell_, not _the fix worked_. **Verify these fixes on a direct-touch device** (a touchscreen, or a pen display in its native pointer mode).
+**An `ExternalPen` (indirect tablet, or a pen routed through WinTab / OpenTabletDriver) frequently does&#x20;**_**not**_**&#x20;cause Windows Ink shell feedback and press-and-hold** the way a direct-touch pen/screen does — **even with every visualization setting ON**. On such a device you draw fine (pointer input arrives) but see no contact ring and no press-and-hold gesture. So "RAW shows no rings" can mean _the device never caused the shell to show feedback_, not _the fix worked_. **Verify these fixes on a direct-touch device** (a touchscreen, or a pen display in its native pointer mode).
 {% endhint %}
 
 ## Where users change these

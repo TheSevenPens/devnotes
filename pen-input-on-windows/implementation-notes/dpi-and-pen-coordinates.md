@@ -14,7 +14,7 @@ Pen coordinate handling on high-DPI Windows displays is one of the most common s
 
 Your app must be **Per-Monitor V2 DPI aware**. This ensures `ClientToScreen`, `ScreenToClient`, `PointFromScreen`, and similar APIs operate in the same coordinate space as Wintab.
 
-> **This is necessary but not sufficient for pen input.** Per-Monitor V2 fixes the coordinate *space*. It does nothing about precision: every one of those APIs is built on an integer `POINT` and quantizes to whole pixels, which is fatal for a sub-pixel pen position. Use them to convert the element origin only, never the pen position. See [Framework Coordinate Conversion](framework-coordinate-conversion.md).
+> **This is necessary but not sufficient for pen input.** Per-Monitor V2 fixes the coordinate *space*. It does nothing about precision: every one of those APIs is built on an integer `POINT` and quantizes to whole pixels, which discards the fractional part of a sub-pixel pen position. Use them to convert the element origin only, never the pen position. See [Framework Coordinate Conversion](framework-coordinate-conversion.md).
 
 More here: [Per-Monitor V2 DPI Awareness](per-monitor-v2-dpi-awareness.md)
 

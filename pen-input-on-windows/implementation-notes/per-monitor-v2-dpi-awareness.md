@@ -10,7 +10,7 @@ Windows applications declare how they handle high-DPI displays. The level affect
 
 | DPI Awareness Level  | Introduced             | What happens                                                                                                                                                         |
 | -------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **DPI Unaware**      | (default before Vista) | Windows lies to the app — all APIs return values as if the display is 96 DPI. Windows bitmap-scales the app's output to the actual DPI, causing blurriness.          |
+| **DPI Unaware**      | (default before Vista) | Windows returns virtualized coordinates — all APIs return values as if the display is 96 DPI. Windows bitmap-scales the app's output to the actual DPI, causing blurriness.          |
 | **System DPI Aware** | Windows Vista          | The app knows the primary monitor's DPI at startup. Renders crisply on the primary monitor but is bitmap-scaled on other monitors with different DPIs.               |
 | **Per-Monitor V1**   | Windows 8.1            | The app receives `WM_DPICHANGED` when moved between monitors and can re-render. But many Win32 APIs (dialog sizing, non-client area) still use the wrong DPI.        |
 | **Per-Monitor V2**   | Windows 10 1703        | The full solution. All Win32 APIs respect the current monitor's DPI. Non-client area (title bar, scrollbars) scales automatically. Child window DPI works correctly. |
