@@ -163,7 +163,7 @@ self.ensure_pixmap(
 );
 ```
 
-`ceil`, not truncate. A pixmap one pixel short of the canvas leaves a strip the stroke can never reach, and puts the surface permanently out of step with the rectangle it gets presented into.
+`ceil`, not truncate. A pixmap one pixel short of the canvas leaves a strip the stroke can never reach, and egui then stretches the pixmap to fill the rectangle it is presented into.
 
 The conversion multiplies the origin up rather than dividing the pen position down, so the drawing code works in physical pixels throughout:
 

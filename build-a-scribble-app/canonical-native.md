@@ -98,7 +98,7 @@ Windows reports **scaled coordinates** to a process that claims less awareness. 
 
 Mouse input hides the problem. Windows scales mouse coordinates by the same factor it scales your window rectangle, so the two agree with each other even though neither one describes the physical screen.
 
-Wintab does not travel through Windows. It reads the tablet and reports true physical desktop pixels from the driver, so pen positions and your window rectangle describe different coordinate spaces. Neither number carries a unit, so both look equally real, and the stroke lands somewhere the pen never went.
+Windows does not scale Wintab coordinates. Wintab reads the tablet and reports true physical desktop pixels from the driver, so pen positions and your window rectangle describe different coordinate spaces. Neither number carries a unit, so both look equally real, and the stroke lands somewhere the pen never went.
 
 | awareness | what Win32 reports | result with a pen |
 | --- | --- | --- |
@@ -464,7 +464,7 @@ Three checks matter here:
 
 The last one is the strongest statement available about a coordinate conversion. A translation preserves angles exactly, so a correct implementation reproduces the input's turn angle to two decimal places. It needs no threshold and no reference value: it compares the output against its own input.
 
-### A tenth check, for the term the others cannot see
+### A tenth check, for the origin, which the other nine do not cover
 
 A conversion is an origin and a scale, and every check above holds the window still. That leaves the origin uncovered: the replay places its input relative to the origin your application reports, then your application subtracts the same value back off, so an origin wrong by any amount cancels itself exactly. `L1.surface-alignment` does not close the gap either, because it asks whether the origin is a whole number rather than whether it is the right one.
 
@@ -541,7 +541,7 @@ float norm  = static_cast<float>(pt.pressure) / g_max_pressure;
 float width = norm * g_brush_size + 0.5f;
 ```
 
-`g_max_pressure` comes from `pen_session_get_max_pressure`. Read it rather than assuming 1024: tablets report 1024, 2048 or 8192 levels depending on the pen, and a hard-coded divisor turns a good pen into a light one.
+`g_max_pressure` comes from `pen_session_get_max_pressure`. Read it rather than assuming a value: tablets report 1024, 2048 or 8192 levels depending on the pen. A divisor smaller than the device's range drives the width past the brush size over most of the pressure range; a divisor larger than it never reaches the brush size at all.
 
 The `+ 0.5` sets a minimum width so a light touch still marks. **`g_brush_size` counts physical pixels**, which is worth deciding explicitly now. The frameworks that lay out in logical units invite you to make it a logical size, and then the same slider draws a stroke 2.25x wider on a scaled display than this sample does.
 

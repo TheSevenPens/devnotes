@@ -222,7 +222,7 @@ Section 2 listed three L1 checks: surface size, pixel alignment, and 1:1 present
 
 Every one of those fails in a framework that lays out in logical units. `Scribble.Wpf`, `Scribble.Avalonia`, `Scribble.WinUI` and `Scribble.Rust` each shipped with at least one of them broken, and two of those went unnoticed after a person had inspected the strokes and approved them.
 
-So the checks earn their place on this path by covering a stage this framework cannot break, which sounds like waste and is not. Write them here, where they pass, and you have a working instrument before you reach a framework that needs one. [Build a Scribble app: WPF](hard-mode-wpf.md) is that framework.
+So the checks cover a stage this framework cannot break, which sounds like waste and is not. Write them here, where they pass, and the checks are already working when you reach a framework that can break that stage. [Build a Scribble app: WPF](hard-mode-wpf.md) is that framework.
 
 ### Verify before proceeding
 
@@ -440,7 +440,7 @@ private (double X, double Y) DesktopToCanvas(double x, double y)
 }
 ```
 
-### A tenth check, for the term the others cannot see
+### A tenth check, for the origin, which the other nine do not cover
 
 A conversion is an origin and a scale, and every check above holds the window still. That leaves the origin uncovered: the replay places its input relative to the origin your application reports, then your application subtracts the same value back off, so an origin wrong by any amount cancels itself exactly. `L1.surface-alignment` does not close the gap either, because it asks whether the origin is a whole number rather than whether it is the right one.
 
@@ -486,7 +486,7 @@ Four things in there matter:
 
 Round caps matter more than they look. A stroke arrives as hundreds of separate short segments rather than one path, and flat caps leave a visible notch at every join where the width changes.
 
-`maxP` comes from `_session.MaxPressure`. Read it rather than assuming 1024: tablets report 1024, 2048 or 8192 levels depending on the pen, and a hard-coded divisor turns a good pen into a light one.
+`maxP` comes from `_session.MaxPressure`. Read it rather than assuming a value: tablets report 1024, 2048 or 8192 levels depending on the pen. A divisor smaller than the device's range drives the width past the brush size over most of the pressure range; a divisor larger than it never reaches the brush size at all.
 
 ### Brush size counts physical pixels
 

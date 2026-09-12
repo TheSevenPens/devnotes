@@ -145,9 +145,9 @@ return (clientOrigin.X + dipOffset.X * dpi.DpiScaleX,
         dpi.DpiScaleY);
 ```
 
-Three pieces, and each one handles a quantity that survives the type it travels in:
+Three pieces, and in each one the type can represent the quantity exactly:
 
-| piece | what it produces | why the type costs nothing |
+| piece | what it produces | why the type loses no precision |
 | --- | --- | --- |
 | `ClientToScreen` | the window's client origin on the desktop | Windows places windows at whole-pixel coordinates |
 | `TransformToAncestor` | the element's offset inside the window, in DIPs | a `GeneralTransform` keeps its fractional part |
@@ -287,7 +287,7 @@ Turn on layout rounding at the window:
         UseLayoutRounding="True">
 ```
 
-### NearestNeighbor guards the fault, and does not fix it
+### NearestNeighbor changes what the fault looks like, and does not fix it
 
 ```xml
 <Image x:Name="DrawImage" Stretch="None"
@@ -295,7 +295,7 @@ Turn on layout rounding at the window:
        HorizontalAlignment="Left" VerticalAlignment="Top" />
 ```
 
-`UseLayoutRounding` keeps the offset whole. `BitmapScalingMode="NearestNeighbor"` changes what a regression looks like: with the default mode WPF resamples and the canvas goes soft, which reads as a brush engine problem; with `NearestNeighbor` the same regression produces visible aliasing, which reads as a layout problem. Setting it without `UseLayoutRounding` leaves the canvas misplaced and merely changes how the damage appears.
+`UseLayoutRounding` keeps the offset whole. `BitmapScalingMode="NearestNeighbor"` changes what a regression looks like: with the default mode WPF resamples and the canvas goes soft, which reads as a brush engine problem; with `NearestNeighbor` the same regression produces visible aliasing, which reads as a layout problem. Setting it without `UseLayoutRounding` leaves the canvas misplaced and only changes what the misplacement looks like.
 
 ### What the fault produces
 
@@ -341,7 +341,7 @@ foreach (var sp in stylusPoints)
 
 Section 3 met the truncation converting inward, from desktop pixels to canvas DIPs. Here the conversion runs outward, and `Visual.PointToScreen` would truncate exactly the same way — destroying the precision the stylus stack just delivered, before the position ever leaves the session. The same `GetTransform` call covers both directions, because a translation and a scale invert without loss.
 
-### Its resolution still trails a Wintab digitizer context
+### The WPF stylus stack reports lower positional resolution than a Wintab digitizer context
 
 One slow shallow curve, drawn by hand on a Wacom tablet at 225% display scaling, recorded through each API minutes apart with both conversions correct:
 
@@ -383,7 +383,7 @@ SELFTEST Scribble.Wpf
 RESULT 10/10 passed
 ```
 
-All three traps on this page trip a check in that report. That is the whole reason the canonical guides made you write the checks in a framework where they could not fail.
+Each of the three traps on this page makes at least one check in that report fail. That is the whole reason the canonical guides made you write the checks in a framework where they could not fail.
 
 ### What no check covers
 
