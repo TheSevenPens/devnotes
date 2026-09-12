@@ -403,7 +403,7 @@ RESULT 7/9 passed
 
 Every point snapped, and the mean angle between consecutive segments went from 0.74 degrees to 19.35. The exact output angle shifts a little with the window position and with whether the code truncates or rounds. The size of the change does not.
 
-On screen that reads as a stroke made of short straight segments meeting at visible angles, worst on slow curves. It looks like a brush engine problem and survives any amount of work on the brush engine.
+On screen that reads as a stroke made of short straight segments meeting at visible angles, worst on slow curves. It looks like a brush engine problem, and no change to the brush engine removes it.
 
 ### Verify
 
@@ -552,7 +552,7 @@ A slow, gently curving stroke matters for the first one. Faceting worsens as the
 
 **"It looks right" establishes less.** A wide brush, a fast stroke, or a display at 1:1 zoom all hide faults that a slow stroke at 3x zoom would show.
 
-[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers the whole of this: the four symptoms, which stage each one comes from, and the measurements that mislead.
+[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers the whole of this: the four symptoms, which stage each one comes from, and the measurements that cannot detect the fault.
 
 ### Where to go next
 

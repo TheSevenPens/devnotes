@@ -10,7 +10,7 @@ A screenshot of a real fault carries everything else that was on screen at the t
 
 A generated image fixes every variable except the fault. The clean image and the faceted image come from the same path, the same brush, the same canvas, the same magnification. The only thing that changes is the one line that introduces the fault.
 
-That has a second use beyond illustration. **Each fault below is a known-bad input you can point your own checks at.** Section 6 of the diagnosis page argues that a check nobody has seen fail is not yet a check; this script is one way to make each check fail on demand.
+That has a second use beyond illustration. **Each fault below is a known-bad input you can point your own checks at.** Section 6 of the diagnosis page argues that a check nobody has seen fail has not yet demonstrated that it can fail; this script is one way to make each check fail on demand.
 
 ## The part that took three attempts
 

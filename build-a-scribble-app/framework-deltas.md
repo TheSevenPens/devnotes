@@ -2,7 +2,7 @@
 
 > **Status: complete first draft.** Tracked in [#8](https://github.com/TheSevenPens/devnotes/issues/8).
 
-Three short sections, one per framework, covering only what differs from the guides already written. Read [WPF hard mode](hard-mode-wpf.md) first: Avalonia, WinUI and egui all lay out in logical units, so all three inherit its three traps and change only the names of the methods involved.
+Three short sections, one per framework, covering only what differs from the guides already written. Read [Build a Scribble app: WPF](hard-mode-wpf.md) first: Avalonia, WinUI and egui all lay out in logical units, so all three inherit its three traps and change only the names of the methods involved.
 
 This page also does one thing no other page in the set does. It puts all six Scribble samples side by side, and ends with one acceptance run across all of them.
 
@@ -25,7 +25,7 @@ Each column names a working implementation in WinPenKit. Every row holds somethi
 
 Two readings of that table matter more than the individual cells.
 
-**The first four columns are the same lesson four times.** The conversion method exists in every framework, and its parameter type gets harder to read from left to right until WPF, where the signature stops saying anything at all. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers the four signatures in detail.
+**The first four columns are the same lesson four times.** The conversion method exists in every framework, and its parameter type gets harder to read from left to right until WPF, whose signature gives no sign of the limit. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers the four signatures in detail.
 
 **The last two columns offer no such method, and that helps rather than hurts.** WinUI and egui give you nothing to misuse. You compute the origin and subtract it because no alternative exists, which is the correct approach anyway.
 

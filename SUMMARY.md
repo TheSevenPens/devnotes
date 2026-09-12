@@ -34,7 +34,7 @@
 * [Build a Scribble app](build-a-scribble-app/README.md)
   * [Native / C++](build-a-scribble-app/canonical-native.md)
   * [WinForms](build-a-scribble-app/canonical-winforms.md)
-  * [WPF (hard mode)](build-a-scribble-app/hard-mode-wpf.md)
+  * [WPF](build-a-scribble-app/hard-mode-wpf.md)
   * [Framework deltas](build-a-scribble-app/framework-deltas.md)
   * [Diagnosing a bad stroke](build-a-scribble-app/diagnosing-a-bad-stroke.md)
   * [Generating the symptom images](build-a-scribble-app/generating-symptom-images.md)

@@ -1,4 +1,4 @@
-# Build a Scribble app: WPF (hard mode)
+# Build a Scribble app: WPF
 
 > **Status: complete first draft.** Tracked in [#8](https://github.com/TheSevenPens/devnotes/issues/8).
 
@@ -21,7 +21,7 @@ Here are some notes:
 - Sections 3, 4 and 5 each name the trap, show the fix, then show the report a real run produces with the fault put back. Every number on this page comes from a run, and each one says which machine produced it
 - The library underneath is the same one the canonical path already proved, so a failure here comes from the coordinate model rather than from WinPenKit
 - The reference implementation lives in `Scribble.Wpf` and `WinPenKit.Wpf` in WinPenKit
-- Section 3 matters more than the rest of this guide set combined. WPF is the one framework where the truncation leaves no trace in a method signature
+- Section 3 matters more than the rest of this guide set combined. WPF is the one framework whose method signature gives no sign of the truncation
 
 ---
 
@@ -189,7 +189,7 @@ Every point snapped. The mean angle between consecutive segments went from 0.74 
 
 A live stream measured earlier in this investigation, on a 175% display through a Wintab digitizer context, produced the same result at a different magnitude: 4.11 degrees in, 17.51 degrees out, and 3014 of 3014 points on whole device pixels. The exact output angle depends on the display scale and on how densely the pen samples; that every point snaps does not.
 
-On screen a reader sees a stroke made of short straight segments meeting at visible angles, worst on slow curves. It looks like a brush engine problem and survives any amount of work on the brush engine.
+On screen a reader sees a stroke made of short straight segments meeting at visible angles, worst on slow curves. It looks like a brush engine problem, and no change to the brush engine removes it.
 
 ### Verify
 
@@ -260,9 +260,9 @@ Sizing the bitmap from DIPs, dropping `_skCanvas.Scale`, and declaring the `Writ
 [FAIL] L1.presentation-1to1    bitmap 1188x547 presented at 2673.0x1231.0 device px  <- magnified or shrunk on the way to the screen
 ```
 
-Two checks, one fault, and they describe different halves of it: the bitmap holds too few pixels, and WPF stretches those pixels to cover the space. The coordinate checks all still pass. So does the pen stream. A canvas drawing at 44% of the display's resolution produces a bumpy stroke through every input API at once, which reads as a problem with the pen rather than with the surface — and that reading is what kept this fault alive while the coordinate work went on around it.
+Two checks, one fault, and they describe different halves of it: the bitmap holds too few pixels, and WPF stretches those pixels to cover the space. The coordinate checks all still pass. So does the pen stream. A canvas drawing at 44% of the display's resolution produces a bumpy stroke through every input API at once, which reads as a problem with the pen rather than with the surface — and that reading is why this fault went unfixed while the coordinate work went on around it.
 
-This is the fault that made every input API look equally bad in `Scribble.Wpf`, and it hid the coordinate truncation of section 3 underneath itself.
+This is the fault that made every input API look equally bad in `Scribble.Wpf`. While it remained, the coordinate truncation of section 3 produced no symptom that could be told apart from it.
 
 ### Verify
 
@@ -307,7 +307,7 @@ Removing `UseLayoutRounding` from the window:
 
 **The fault is one-dimensional.** The x origin landed on a whole pixel and the y origin landed 0.68 of a pixel below one, because only the vertical position depends on the ribbon's content height. The instance found during this investigation, on a 175% display, measured 0.00 horizontally and 0.64 vertically.
 
-That detail cost real time. A check written to scan across a near-vertical stroke and measure how sharply its edges fell off reported the canvas clean, because it sampled along the axis that had no error. **A measurement taken along one axis says nothing about the other.** [Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers this and the other measurements that mislead.
+That detail cost real time. A check written to scan across a near-vertical stroke and measure how sharply its edges fell off reported the canvas clean, because it sampled along the axis that had no error. **A measurement taken along one axis says nothing about the other.** [Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers this and the other measurements that cannot detect the fault.
 
 ### Verify
 
@@ -413,7 +413,7 @@ The third one matters most here. Every scale-dependent fault on this page passes
 
 **"It looks right" establishes less.** A wide brush, a fast stroke, or a display at 100% scaling all hide faults that a slow stroke at 3x zoom on a scaled display would show.
 
-[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers the whole of this: the four symptoms, which stage each one comes from, and the measurements that mislead.
+[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers the whole of this: the four symptoms, which stage each one comes from, and the measurements that cannot detect the fault.
 
 ### Where to go next
 
