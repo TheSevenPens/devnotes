@@ -37,6 +37,7 @@
   * [WPF (hard mode)](build-a-scribble-app/hard-mode-wpf.md)
   * [Framework deltas](build-a-scribble-app/framework-deltas.md)
   * [Diagnosing a bad stroke](build-a-scribble-app/diagnosing-a-bad-stroke.md)
+  * [Generating the symptom images](build-a-scribble-app/generating-symptom-images.md)
 * [Processing pen data](processing-pen-data/README.md)
   * [Pressure Quantization](processing-pen-data/pressure-quantization.md)
   * [Position Smoothing](processing-pen-data/position-smoothing.md)
