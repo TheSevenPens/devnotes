@@ -1,4 +1,4 @@
-# Build a Scribble app: WPF (hard mode)
+# Build a Scribble app: WPF
 
 > **Status: complete first draft.** Tracked in [#8](https://github.com/TheSevenPens/devnotes/issues/8).
 

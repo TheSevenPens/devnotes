@@ -2,7 +2,7 @@
 
 > **Status: complete first draft.** Tracked in [#8](https://github.com/TheSevenPens/devnotes/issues/8).
 
-Three short sections, one per framework, covering only what differs from the guides already written. Read [WPF hard mode](hard-mode-wpf.md) first: Avalonia, WinUI and egui all lay out in logical units, so all three inherit its three traps and change only the names of the methods involved.
+Three short sections, one per framework, covering only what differs from the guides already written. Read [Build a Scribble app: WPF](hard-mode-wpf.md) first: Avalonia, WinUI and egui all lay out in logical units, so all three inherit its three traps and change only the names of the methods involved.
 
 This page also does one thing no other page in the set does. It puts all six Scribble samples side by side, and ends with one acceptance run across all of them.
 
