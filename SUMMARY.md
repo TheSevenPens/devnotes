@@ -18,6 +18,7 @@
     * [Wintab and Windows Ink Coexistence](pen-input-on-windows/implementation-notes/wintab-vs-windows-ink-driver-conflict.md)
     * [Known Quirks and Gotchas](pen-input-on-windows/implementation-notes/known-quirks-and-gotchas.md)
     * [DPI and Pen Coordinates](pen-input-on-windows/implementation-notes/dpi-and-pen-coordinates.md)
+    * [Framework Coordinate Conversion](pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md)
     * [Per-Monitor V2 DPI Awareness](pen-input-on-windows/implementation-notes/per-monitor-v2-dpi-awareness.md)
     * [WM\_POINTER Event Coalescing](pen-input-on-windows/implementation-notes/wm-pointer-coalescing.md)
     * [Wintab input routing](pen-input-on-windows/implementation-notes/wintab-input-routing.md)

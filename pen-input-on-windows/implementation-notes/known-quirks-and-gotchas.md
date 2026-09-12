@@ -21,6 +21,8 @@ For more details see: [Wintab gotchas](wintab-gotchas.md)
 * **Pre-normalized pressure:** convenient but loses the raw range (some tablets report 8192 levels, others 2048 — both become 0.0–1.0)
 * **Tilt as X/Y:** less precise than azimuth/altitude for certain brush algorithms (calligraphy, airbrush)
 * **InkCanvas:** built-in ink rendering is easy but limited for custom brush engines
+* **`PointFromScreen` / `PointToScreen` truncate:** they take and return `Point` (two `double`) but route through an integer Win32 `POINT`, quantizing every pen position to a whole device pixel. The result still has decimals after the DPI divide, so it looks fine. See [Framework Coordinate Conversion](framework-coordinate-conversion.md)
+* **Layout is not device-pixel aligned by default:** without `UseLayoutRounding`, a canvas can land on a fractional pixel and WPF resamples the whole surface, softening every edge
 
 ### RealTimeStylus
 
