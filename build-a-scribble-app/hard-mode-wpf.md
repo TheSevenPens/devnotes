@@ -164,7 +164,15 @@ Follow this in any framework:
 
 > **Let the framework convert the origin. Subtract it from the pen position yourself.** The origin is a whole number, so an integer API returns it unchanged. The pen position keeps its fractional part because no API touches it.
 
-Refresh the origin whenever the surface is rebuilt, which covers a resize, a move to another display, and a DPI change.
+**Read it again every time you convert a batch of points**, rather than caching it when you build the surface. Dragging the window changes the origin and raises no size change, so a cached copy goes stale the moment the window moves, and every stroke after that lands the drag distance from the pen.
+
+`Scribble.Wpf` shipped with exactly that fault, and nine checks passed either side of the move. The tenth exists because of it:
+
+```
+[PASS] L3.origin-tracks-window  moved 37,23px; conversion followed
+```
+
+It moves the window a known distance and converts the same desktop point again, so a conversion that re-reads the origin reports a position shifted by that distance and one that cached it reports what it did before. The replay could never have caught this: it places its input relative to the origin the application reports, then the application subtracts the same value back off, so a wrong origin cancels itself exactly.
 
 ### What the fault produces
 
@@ -362,16 +370,17 @@ A passing `--replay` establishes this much:
 
 ```
 SELFTEST Scribble.Wpf
-[PASS] L0.dpi-awareness        PerMonitorV2
-[PASS] L0.window-placement     client 2672x1496 at 399,450; work area 3840x2052 at 0,0
-[PASS] L0.scale                2.25x
-[PASS] L1.surface-physical     bitmap 2672x1230, expected 2672x1230 (= ceil(1188x547 logical x 2.25))
-[PASS] L1.surface-alignment    origin 399.00,716.00px
-[PASS] L1.presentation-1to1    bitmap 2672x1230 presented at 2672.0x1230.0 device px
-[PASS] L2.recording-subpixel   0.0% of 480 recorded points are on whole pixels
-[PASS] L3.conversion-snap      0.0% of converted points land on whole device pixels
-[PASS] L3.conversion-lossless  mean turn angle in 0.74 deg, out 0.74 deg (delta 0.00)
-RESULT 9/9 passed
+[PASS] L0.dpi-awareness         PerMonitorV2
+[PASS] L0.window-placement      client 2672x1496 at 344,395; work area 3840x2052 at 0,0
+[PASS] L0.scale                 2.25x
+[PASS] L1.surface-physical      bitmap 2672x1230, expected 2672x1230 (= ceil(1188x547 logical x 2.25))
+[PASS] L1.surface-alignment     origin 344.00,661.00px
+[PASS] L1.presentation-1to1     bitmap 2672x1230 presented at 2672.0x1230.0 device px
+[PASS] L2.recording-subpixel    0.0% of 480 recorded points are on whole pixels
+[PASS] L3.conversion-snap       0.0% of converted points land on whole device pixels
+[PASS] L3.conversion-lossless   mean turn angle in 0.74 deg, out 0.74 deg (delta 0.00)
+[PASS] L3.origin-tracks-window  moved 37,23px; conversion followed
+RESULT 10/10 passed
 ```
 
 All three traps on this page trip a check in that report. That is the whole reason the canonical guides made you write the checks in a framework where they could not fail.
@@ -400,7 +409,7 @@ The third one matters most here. Every scale-dependent fault on this page passes
 
 ### Read the answers carefully
 
-**Treat "it looks wrong" as real even when the report says `9/9`.** The checks cover three stages and the five things above sit outside all of them.
+**Treat "it looks wrong" as real even when the report says `10/10`.** The checks cover three stages and the five things above sit outside all of them.
 
 **"It looks right" establishes less.** A wide brush, a fast stroke, or a display at 100% scaling all hide faults that a slow stroke at 3x zoom on a scaled display would show.
 

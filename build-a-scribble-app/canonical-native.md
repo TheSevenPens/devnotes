@@ -464,6 +464,20 @@ Three checks matter here:
 
 The last one is the strongest statement available about a coordinate conversion. A translation preserves angles exactly, so a correct implementation reproduces the input's turn angle to two decimal places. It needs no threshold and no reference value: it compares the output against its own input.
 
+### A tenth check, for the term the others cannot see
+
+A conversion is an origin and a scale, and every check above holds the window still. That leaves the origin uncovered: the replay places its input relative to the origin your application reports, then your application subtracts the same value back off, so an origin wrong by any amount cancels itself exactly. `L1.surface-alignment` does not close the gap either, because it asks whether the origin is a whole number rather than whether it is the right one.
+
+```
+[PASS] L3.origin-tracks-window  moved 37,23px; conversion followed
+```
+
+That check moves the window a known distance and converts the same desktop point again. A conversion that reads the origin fresh reports a position shifted by exactly that distance. One that cached the origin reports what it did before, because nothing told it the window moved.
+
+`Scribble.Wpf` shipped with that fault: it cached the origin when it built its bitmap, dragging the window raised no size change, and every stroke after a drag landed the drag distance from the pen while nine checks passed. Someone drawing found it in seconds.
+
+**Read the origin the way your input path reads it.** A conversion that re-reads it for the check while the pen code uses a cached copy tests something the pen never does.
+
 Before moving on, put the fault back deliberately. Cast the pen position to a `POINT`, run `--replay` again, and watch `conversion-snap` report close to 100%. A check you have never seen fail has not yet demonstrated that it can.
 
 ## 7. Drawing a stroke
@@ -541,7 +555,7 @@ Then run the checks once more:
 ScribbleCpp.exe --replay
 ```
 
-All nine should still pass. That run covers the environment, the surface and the coordinate conversion, and it says nothing at all about the drawing you just added: the checks measure where the stroke goes, not what it looks like when drawn. Antialiasing, caps, joins and the pressure curve are for a person to judge, which is section 8.
+All ten should still pass. That run covers the environment, the surface and the coordinate conversion, and it says nothing at all about the drawing you just added: the checks measure where the stroke goes, not what it looks like when drawn. Antialiasing, caps, joins and the pressure curve are for a person to judge, which is section 8.
 
 ## 8. Handing it to a person
 
@@ -550,6 +564,7 @@ A passing `--replay` establishes this much:
 - The process reports Per-Monitor V2, and the window sits inside the work area
 - The surface holds one pixel per screen pixel, starts on a whole pixel, and reaches the screen unscaled
 - A recorded stroke pushed through your conversion comes out with the same shape it went in with
+- The canvas origin follows the window when the window moves, rather than going stale the moment someone drags it
 
 That is everything the machine can settle. Four things remain.
 
@@ -575,7 +590,7 @@ A slow, gently curving stroke matters for the first one. Faceting worsens as the
 
 ### Read the answers carefully
 
-**Treat "it looks wrong" as real even when the report says `9/9`.** Your checks cover three stages and the four things above sit outside all of them. Someone reporting a bad stroke against `9/9` has found something the checks do not measure, and the useful response is to find out what.
+**Treat "it looks wrong" as real even when the report says `10/10`.** Your checks cover three stages and the four things above sit outside all of them. Someone reporting a bad stroke against a clean report has found something the checks do not measure, and the useful response is to find out what.
 
 **"It looks right" establishes less.** A wide brush, a fast stroke, or a display at 1:1 zoom all hide faults that a slow stroke at 3x zoom would show.
 

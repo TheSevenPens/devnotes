@@ -224,16 +224,16 @@ Measured today on a 225% display, work area 3840x2052, each sample rebuilt first
 
 | sample | display scale | logical to physical ratio | bitmap | result |
 | --- | --- | --- | --- | --- |
-| `Scribble.Win32` | 2.25x | 1.00 | 1372x496 | 9/9 |
-| `Scribble.WinForms` | 2.25x | 1.00 | 1172x431 | 9/9 |
-| `Scribble.Wpf` | 2.25x | 2.25 | 2672x1230 | 9/9 |
-| `Scribble.Avalonia` | 2.25x | 2.25 | 2700x1348 | 9/9 |
-| `Scribble.WinUI` | 2.25x | 2.25 | 2852x1196 | 9/9 |
-| `Scribble.Rust` | 2.25x | 2.25 | 2439x1022 | 9/9 |
+| `Scribble.Win32` | 2.25x | 1.00 | 1372x496 | 10/10 |
+| `Scribble.WinForms` | 2.25x | 1.00 | 1172x431 | 10/10 |
+| `Scribble.Wpf` | 2.25x | 2.25 | 2672x1230 | 10/10 |
+| `Scribble.Avalonia` | 2.25x | 2.25 | 2700x1348 | 10/10 |
+| `Scribble.WinUI` | 2.25x | 2.25 | 2852x1196 | 10/10 |
+| `Scribble.Rust` | 2.25x | 2.25 | 2439x1022 | 10/10 |
 
 The third column separates the two groups exactly. Win32 and WinForms lay out in device pixels, so their surface check compares the bitmap against the canvas at a ratio of 1.00 even though the display runs at 2.25x. The other four lay out in logical units, so the same check multiplies by 2.25. A sample reporting 1.00 from one of those four would be the DIP-sized surface fault, stated as a number.
 
-Every sample prints the same nine check identifiers in the same order, which is the point of putting them in `WinPenKit.Diagnostics` rather than writing each one per application. `Scribble.Win32` reimplements them in C++ and `Scribble.Rust` in Rust, against the same identifiers and the same output format.
+Every sample prints the same ten check identifiers in the same order, which is the point of putting them in `WinPenKit.Diagnostics` rather than writing each one per application. `Scribble.Win32` reimplements them in C++ and `Scribble.Rust` in Rust, against the same identifiers and the same output format.
 
 ### What this run does not establish
 
