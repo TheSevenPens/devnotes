@@ -1,6 +1,6 @@
 # Build a Scribble app
 
-> **Status: outlines.** The structure below is settled; the content is not written yet. Tracked in [#8](https://github.com/TheSevenPens/devnotes/issues/8).
+> **Status: all five pages written as complete first drafts.** Remaining follow-up items live at the foot of each page, tracked in [#8](https://github.com/TheSevenPens/devnotes/issues/8).
 
 A guided path to building a working pen-input drawing application on Windows using [WinPenKit](https://github.com/TheSevenPens/WinPenKit), aimed equally at a person and at an AI agent working on their behalf.
 
