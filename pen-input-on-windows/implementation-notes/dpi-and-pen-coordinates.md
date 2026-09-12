@@ -14,6 +14,8 @@ Pen coordinate handling on high-DPI Windows displays is one of the most common s
 
 Your app must be **Per-Monitor V2 DPI aware**. This ensures `ClientToScreen`, `ScreenToClient`, `PointFromScreen`, and similar APIs operate in the same coordinate space as Wintab.
 
+> **This is necessary but not sufficient for pen input.** Per-Monitor V2 fixes the coordinate *space*. It does nothing about precision: every one of those APIs is built on an integer `POINT` and quantizes to whole pixels, which is fatal for a sub-pixel pen position. Use them to convert the element origin only, never the pen position. See [Framework Coordinate Conversion](framework-coordinate-conversion.md).
+
 More here: [Per-Monitor V2 DPI Awareness](per-monitor-v2-dpi-awareness.md)
 
 ### Native C++ apps
@@ -42,9 +44,13 @@ Without this, the entire UI renders blurry (bitmap-scaled) and pen coordinates d
 
 .NET 10 WinForms sets Per-Monitor V2 automatically via `<ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>`. `Control.PointToClient()` handles DPI conversion automatically.
 
+**Do not use it for pen input.** It takes and returns a `System.Drawing.Point`, whose `X` and `Y` are `Int32`, and there is no `PointF` overload — it cannot carry a sub-pixel position at all. Convert the control origin and subtract in floating point instead: see [Framework Coordinate Conversion](framework-coordinate-conversion.md).
+
 ### WPF
 
 .NET 10 WPF is Per-Monitor V2 by default. `PointFromScreen` handles DPI conversion.
+
+**Do not use it for pen input.** It takes and returns a `Point` of two `double`, so it looks precision-preserving, but it routes through an integer Win32 `POINT` and truncates every coordinate to a whole device pixel. Measured with a Wintab digitizer context at 1.75x scaling, it quantized 3014 of 3014 points and raised the mean turn angle between segments from 4.11 to 17.51 degrees. `Visual.PointToScreen` has the same flaw in the other direction. See [Framework Coordinate Conversion](framework-coordinate-conversion.md).
 
 ### WinUI 3 Coordinate Conversion
 
