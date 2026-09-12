@@ -335,9 +335,26 @@ Section 3 met the truncation converting inward, from desktop pixels to canvas DI
 
 ### Its resolution still trails a Wintab digitizer context
 
-Measured on the 175% display with a real tablet: the WPF stylus stack produced a mean turn angle of 5.32 degrees against 2.69 degrees from a Wintab digitizer context on the same hardware, with both conversions correct.
+One slow shallow curve, drawn by hand on a Wacom tablet at 225% display scaling, recorded through each API minutes apart with both conversions correct:
+
+| | points | mean turn angle | on whole pixels |
+| --- | --- | --- | --- |
+| WPF stylus stack | 1170 | **4.75 deg** | 0.0% |
+| Wintab digitizer context | 1043 | **2.91 deg** | 0.0% |
+
+Neither stream is quantized, so the gap is resolution rather than truncation. Both recordings live in `testdata/` in WinPenKit, and `--replay` on either one prints the figure above as its `in` value.
+
+**Check that the two strokes are alike before reading anything into the difference.** Turn angle rises as sampling tightens, so a slower stroke through one API would produce a larger angle on its own. These two came out at 1682px of path against 1602px, and 1.44px per sample against 1.55px. Seven per cent of sampling difference does not account for sixty-three per cent of turn angle.
 
 That difference belongs to the stack rather than to your code. WPF's stylus input travels through a different path with its own sampling, and no application-side change closes the gap. Offer both APIs and let the person drawing decide. A stroke that improves when they switch to the digitizer context tells them where the limit sits.
+
+Capture your own pair with `--record`, which `Scribble.Wpf` implements:
+
+```
+Scribble.Wpf.exe --record wpf-stylus.csv
+```
+
+Draw, then close the window. Draw both strokes at the same speed, and check the `# Source:` line each recording carries before comparing them.
 
 ## 7. Handing it to a person
 
@@ -397,6 +414,5 @@ The third one matters most here. Every scale-dependent fault on this page passes
 
 ## To write
 
-- [ ] Re-measure the WPF stylus stack against a Wintab digitizer context on the 225% display, so both figures in section 6 come from the same machine as the rest of the page
 - [ ] Confirm whether `UseLayoutRounding` on the canvas element alone suffices, rather than on the window
 - [ ] Decide whether section 4's `ResetMatrix` detail belongs here or in a SkiaSharp note
