@@ -33,6 +33,13 @@ QTabletEvent
 
 Krita does **not directly implement WinTab or Windows Ink**. Krita delegates all tablet input handling to Qt, and only configures which API to use when the Qt application starts.
 
+One consequence is worth calling out, because it is invisible from Krita's UI: **Qt always opens
+its WinTab context at tablet-native (high) resolution**, so Krita's "WinTab" setting is the
+high-resolution context and there is no lower-precision option. This is also why Krita's strokes
+look clean with brush smoothing set to **None** — the smoothing settings are not what is doing
+that work. See [Qt always uses the high-resolution
+context](qt-pen-api-implementation-notes.md#qt-always-uses-the-high-resolution-tablet-native-context).
+
 ## Krita versions vs Qt versions
 
 See: [https://krita.org/en/release-notes/krita-5-3-release-notes/](https://krita.org/en/release-notes/krita-5-3-release-notes/)

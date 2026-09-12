@@ -64,6 +64,15 @@ For tablet-native resolution (\~5080 LPI vs \~200 DPI screen):
 2. Cache the system context's `InOrg/InExt → SysOrg/SysExt` mapping
 3. Convert via `ScaleAxis` through the cached mapping
 4. Negate `SysExtY` for Y-axis inversion
+5. Keep the converted position in floating point all the way to the canvas — one trip through
+   an integer screen-coordinate type discards the precision you just went to the trouble of
+   obtaining
+
+**Qt does this unconditionally**, so every Qt application — Krita included — is on tablet-native
+input whether or not its author thought about it. If you are comparing your stroke quality
+against Krita's, that is what you are comparing against. See [Qt pen api implementation
+notes](../../misc/krita-and-qt/qt-pen-api-implementation-notes.md#qt-always-uses-the-high-resolution-tablet-native-context)
+for the code and for measurements of what the screen-pixel mapping costs.
 
 ## 10. Wintab/WM\_POINTER driver conflict
 
