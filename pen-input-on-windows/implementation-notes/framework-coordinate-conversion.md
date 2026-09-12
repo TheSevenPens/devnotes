@@ -2,19 +2,19 @@
 
 Every UI framework offers a pair of methods for converting between a control's coordinate space and the screen — `PointFromScreen`, `PointToClient`, and their equivalents. **None of them are safe for pen input.** All of them quantize to whole pixels, because all of them are built on Win32 `ClientToScreen` / `ScreenToClient`, which take an integer `POINT`.
 
-For mouse input this costs nothing: mouse positions are integral to begin with. For pen input it destroys the single thing a digitizer context exists to provide.
+For mouse input the truncation does not change the value: mouse positions are already integers. For pen input the same truncation discards the fractional part of the position, which is the reason to use a digitizer context.
 
-The symptom is a stroke with flat facets and small kinks, most visible on slow, gently curving lines. It is easy to mistake for a brush engine problem, and it will survive any amount of work on the brush engine.
+The symptom is a stroke with flat facets and small kinks, most visible on slow, gently curving lines. The same facets remain if the integer conversion is left in place and only the brush engine is changed.
 
 ## The rule
 
 > **Convert the element origin, not the pen position.**
 
-The origin is on a pixel boundary, so a lossy conversion costs nothing when applied to it. The pen position is the one value that must stay fractional — so it should never be passed to one of these APIs at all. Subtract the origin and apply the DPI scale yourself.
+The origin is on a pixel boundary, so truncating it to a `POINT` does not change its value. The pen position is the one value that must stay fractional — so it should never be passed to one of these APIs at all. Subtract the origin and apply the DPI scale yourself.
 
 Every instance of this bug found across a full investigation of six sample applications — eight instances in total — was the same mistake of applying an integer conversion to the point rather than to the origin.
 
-## 1. WPF: the signature hides it
+## 1. WPF: the signature uses double and the conversion truncates
 
 `Visual.PointToScreen` and `Visual.PointFromScreen` take and return `System.Windows.Point`, which is a pair of `double`. Nothing in the signature suggests a loss of precision. Internally the value is converted to a `POINT`:
 
@@ -68,7 +68,7 @@ public static class WpfCoordinates
             return null;
         }
 
-        // The window's client origin. Integral by nature, so the POINT costs nothing here.
+        // The window's client origin. Already an integer, so converting it through a POINT does not change its value.
         var clientOrigin = new POINT { X = 0, Y = 0 };
         if (!ClientToScreen(source.Handle, ref clientOrigin))
             return null;
@@ -114,7 +114,7 @@ Cache the transform per input event rather than per point — a stylus event car
 
 `StylusEventArgs.GetStylusPoints(element)` correctly returns sub-pixel DIPs. Calling `element.PointToScreen(...)` to normalise them to screen coordinates throws that away immediately. The high-resolution data was there; the conversion discarded it.
 
-## 2. WinForms: the type says so out loud
+## 2. WinForms: PointToClient takes and returns Int32
 
 `Control.PointToClient` cannot carry a sub-pixel position at all. There is exactly one overload of each method and no `PointF` variant:
 
@@ -142,7 +142,7 @@ var canvasPt = new PointF(
     (float)(pt.DesktopY - origin.Y));
 ```
 
-## 3. Avalonia: the return type gives it away
+## 3. Avalonia: PointToScreen returns PixelPoint of int
 
 `TopLevel.PointToScreen(Point)` returns a `PixelPoint`, whose members are `int`. Same trap, visible in the signature.
 
@@ -159,11 +159,11 @@ var clientPt = new Point((pt.DesktopX - windowOrigin.X) / scale,
 
 Avalonia's own pointer handling had this bug internally and fixed it in **11.3**. Applications on earlier versions get quantized pen positions no matter how carefully they do their own conversion.
 
-## 4. Why it survives review
+## 4. Why review does not catch the truncation
 
-Three things conspire, and the second is the one that does the damage.
+Three facts make the truncation easy to miss in review. The second is the one that makes a truncated coordinate look fractional.
 
-**The signature can lie.** WPF's is `Point PointFromScreen(Point)` — all doubles, no hint of an integer. WinForms and Avalonia are honest by comparison; WPF is not.
+**The WPF method types do not show the truncation.** WPF's signature is `Point PointFromScreen(Point)` — all doubles, no mention of an integer. WinForms and Avalonia expose the integer conversion in their parameter or return types; WPF does not.
 
 **The output still has decimals.** On a scaled display the conversion divides by the DPI scale, so an integer input *still* produces a fractional result:
 
@@ -171,7 +171,7 @@ Three things conspire, and the second is the one that does the damage.
 701 device px / 1.75 = 400.571428...   ← looks like sub-pixel precision
 ```
 
-A debug readout showing `Canvas: 400.57, 233.14` looks perfectly healthy and proves nothing whatsoever about the input. A readout like that was, during one investigation, taken as confirmation that coordinates were fine — it could not have detected the problem it was being used to rule out. **If a coordinate readout is being used as evidence, print the raw screen position with decimals, before any scale division.**
+A debug readout showing `Canvas: 400.57, 233.14` still has fractional parts after the DPI divide, and that does not show whether the input was truncated to whole device pixels. A readout like that was, during one investigation, taken as confirmation that coordinates were fine — a value taken after the scale division cannot show the truncation this check was meant to find. **If a coordinate readout is being used as evidence, print the raw screen position with decimals, before any scale division.**
 
 **Correct DPI awareness does not help.** Per-Monitor V2 makes these APIs operate in the right *coordinate space*. It does nothing about the truncation. See [Per-Monitor V2 DPI Awareness](per-monitor-v2-dpi-awareness.md).
 
@@ -220,7 +220,7 @@ This is falsifiable in a way "it looks smooth" is not, and it isolates a single 
 
 Both of these also present as "the strokes look wrong" and are invisible to coordinate checks, so they are worth ruling out at the same time.
 
-**A surface sized in logical units.** A canvas bitmap allocated from `ActualWidth`/`ActualHeight` (DIPs) rather than physical pixels is magnified to fit. At 1.75× that is a canvas drawn at 57% of the display's resolution. No coordinate precision survives it.
+**A surface sized in logical units.** A canvas bitmap allocated from `ActualWidth`/`ActualHeight` (DIPs) rather than physical pixels is magnified to fit. At 1.75× that is a canvas drawn at 57% of the display's resolution. The converted coordinates then address a bitmap that has fewer pixels than the display.
 
 ```csharp
 double scale = VisualTreeHelper.GetDpi(this).DpiScaleX;
