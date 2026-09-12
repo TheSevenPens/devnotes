@@ -251,3 +251,4 @@ Note that the offset was `0.00` horizontally and fractional only vertically, so 
 - [DPI and Pen Coordinates](dpi-and-pen-coordinates.md)
 - [Per-Monitor V2 DPI Awareness](per-monitor-v2-dpi-awareness.md)
 - [Known Quirks and Gotchas](known-quirks-and-gotchas.md)
+- [Position Smoothing](../../processing-pen-data/position-smoothing.md) — mild smoothing recovers a measurable part of the error quantization introduces, when quantization is genuinely unavoidable
