@@ -11,7 +11,7 @@ The same application as the [native guide](canonical-native.md) builds. What cha
 | | Native / C++ | WinForms |
 | --- | --- | --- |
 | coordinate model | physical pixels | physical pixels, the same |
-| acceptance checks | nine | the same nine |
+| acceptance checks | ten | the same ten |
 | library surface | a flat C API you call directly | a managed one |
 | getting to a first window | MSBuild, a Windows SDK, two traps in the project file | `dotnet new winforms` |
 
@@ -413,16 +413,17 @@ Scribble.WinForms.exe --replay
 
 ```
 SELFTEST Scribble.WinForms
-[PASS] L0.dpi-awareness        PerMonitorV2
-[PASS] L0.window-placement     client 1172x621 at 124,175; work area 3840x2052 at 0,0
-[PASS] L0.scale                2.25x
-[PASS] L1.surface-physical     bitmap 1172x431, expected 1172x431 (= ceil(1172x431 logical x 1.00))
-[PASS] L1.surface-alignment    origin 124.00,365.00px
-[PASS] L1.presentation-1to1    bitmap 1172x431 presented at 1172.0x431.0 device px
-[PASS] L2.recording-subpixel   0.0% of 480 recorded points are on whole pixels
-[PASS] L3.conversion-snap      0.0% of converted points land on whole device pixels
-[PASS] L3.conversion-lossless  mean turn angle in 0.74 deg, out 0.74 deg (delta 0.00)
-RESULT 9/9 passed
+[PASS] L0.dpi-awareness         PerMonitorV2
+[PASS] L0.window-placement      client 1172x621 at 289,340; work area 3840x2052 at 0,0
+[PASS] L0.scale                 2.25x
+[PASS] L1.surface-physical      bitmap 1172x431, expected 1172x431 (= ceil(1172x431 logical x 1.00))
+[PASS] L1.surface-alignment     origin 289.00,530.00px
+[PASS] L1.presentation-1to1     bitmap 1172x431 presented at 1172.0x431.0 device px
+[PASS] L2.recording-subpixel    0.0% of 480 recorded points are on whole pixels
+[PASS] L3.conversion-snap       0.0% of converted points land on whole device pixels
+[PASS] L3.conversion-lossless   mean turn angle in 0.74 deg, out 0.74 deg (delta 0.00)
+[PASS] L3.origin-tracks-window  moved 37,23px; conversion followed
+RESULT 10/10 passed
 ```
 
 Note `L0.scale` reporting `2.25x` while `L1.surface-physical` compares against a ratio of `1.00`. Both numbers are correct and they measure different things: the display runs at 2.25x, and WinForms lays out in physical pixels, so the bitmap and the panel share one unit. Pass the display scale into that check instead and it compares the bitmap against a size the application never meant to produce.
@@ -438,6 +439,20 @@ private (double X, double Y) DesktopToCanvas(double x, double y)
     return (x - origin.X, y - origin.Y);
 }
 ```
+
+### A tenth check, for the term the others cannot see
+
+A conversion is an origin and a scale, and every check above holds the window still. That leaves the origin uncovered: the replay places its input relative to the origin your application reports, then your application subtracts the same value back off, so an origin wrong by any amount cancels itself exactly. `L1.surface-alignment` does not close the gap either, because it asks whether the origin is a whole number rather than whether it is the right one.
+
+```
+[PASS] L3.origin-tracks-window  moved 37,23px; conversion followed
+```
+
+That check moves the window a known distance and converts the same desktop point again. A conversion that reads the origin fresh reports a position shifted by exactly that distance. One that cached the origin reports what it did before, because nothing told it the window moved.
+
+`Scribble.Wpf` shipped with that fault: it cached the origin when it built its bitmap, dragging the window raised no size change, and every stroke after a drag landed the drag distance from the pen while nine checks passed. Someone drawing found it in seconds.
+
+**Read the origin the way your input path reads it.** A conversion that re-reads it for the check while the pen code uses a cached copy tests something the pen never does.
 
 Before moving on, reproduce the failing report above yourself. Replace the body of `DesktopToCanvas` with the `PointToClient` version, rebuild, run `--replay`, and confirm two things: the two L3 checks fail, and the process exits with code 1. Then put the subtraction back.
 
@@ -498,7 +513,7 @@ Then run the checks once more:
 Scribble.WinForms.exe --replay
 ```
 
-All nine should still pass. That run covers the environment, the surface and the coordinate conversion, and it says nothing about the drawing you just added: the checks measure where the stroke goes, not what it looks like. Antialiasing, caps and the pressure curve are for a person to judge, which is section 7.
+All ten should still pass. That run covers the environment, the surface and the coordinate conversion, and it says nothing about the drawing you just added: the checks measure where the stroke goes, not what it looks like. Antialiasing, caps and the pressure curve are for a person to judge, which is section 7.
 
 ## 7. Handing it to a person
 
@@ -507,6 +522,7 @@ A passing `--replay` establishes this much:
 - The process reports Per-Monitor V2, and the window sits inside the work area
 - The surface holds one pixel per screen pixel, starts on a whole pixel, and reaches the screen unscaled
 - A recorded stroke pushed through your conversion comes out with the same shape it went in with
+- The canvas origin follows the window when the window moves, rather than going stale the moment someone drags it
 
 That is everything the machine can settle. Four things remain.
 
@@ -532,7 +548,7 @@ A slow, gently curving stroke matters for the first one. Faceting worsens as the
 
 ### Read the answers carefully
 
-**Treat "it looks wrong" as real even when the report says `9/9`.** Your checks cover three stages and the four things above sit outside all of them. Someone reporting a bad stroke against a clean report has found something the checks do not measure, and the useful response is to find out what.
+**Treat "it looks wrong" as real even when the report says `10/10`.** Your checks cover three stages and the four things above sit outside all of them. Someone reporting a bad stroke against a clean report has found something the checks do not measure, and the useful response is to find out what.
 
 **"It looks right" establishes less.** A wide brush, a fast stroke, or a display at 1:1 zoom all hide faults that a slow stroke at 3x zoom would show.
 
