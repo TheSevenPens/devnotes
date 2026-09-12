@@ -84,9 +84,9 @@ They masked each other:
 
 So the questions above narrow the search. They do not name a single cause.
 
-**Check in pipeline order: environment, surface, coordinates, pressure.** Each stage looks wrong when a stage above it breaks, but measuring a stage never depends on the stages below. A surface check ignores strokes; a coordinate check ignores pixels. Section 2 explains why.
+**Check in pipeline order: environment, surface, coordinates, pressure.** Each stage looks wrong when an earlier stage breaks, but measuring a stage never depends on the later ones. A surface check ignores strokes; a coordinate check ignores pixels. Section 2 explains why.
 
-Expect "still wrong" after a partial fix. Scribble.Wpf drew that response twice.
+Expect "still wrong" after a partial fix. Scribble.Wpf produced that response twice.
 
 ## 2. Building checks into your own app
 
@@ -96,8 +96,8 @@ The six Scribble applications in WinPenKit work this way. Each one carries check
 
 Five things to take from those samples into an application of your own:
 
-- **Report internal state as text, not only on screen.** A bad stroke tells you something went wrong. A printed surface size tells you which stage. Text also survives redirection into a log or a build job, and nobody with eyes may sit in front of the screen when the fault appears.
-- **Check in pipeline order: environment, surface, coordinates, pressure.** Each stage looks wrong when a stage above it breaks, so a check that runs out of order reports a fault it does not own.
+- **Report internal state as text, not only on screen.** A bad stroke tells you something went wrong. A printed surface size tells you which stage. Text also survives redirection into a log or a build job, and no person may be watching the screen when the fault appears.
+- **Check in pipeline order: environment, surface, coordinates, pressure.** Each stage looks wrong when an earlier stage breaks, so a check that runs out of order reports a fault it does not own.
 - **Read the first failure and stop.** Fix it, run the checks again, and see what survives. The failures under the first one may exist only because of it.
 - **Run before forming a theory, and again after each fix.** Checks cost seconds. Reading code that never had the problem costs an afternoon.
 - **List what the checks do not cover.** Someone reading a passing report will assume it covers everything. The Scribble checks never exercise Wintab, never look inside the pen session, and never judge how a stroke looks, so the documentation says so directly. Without that, "all checks passed" gets repeated as "the application works".
@@ -121,7 +121,7 @@ Both flags:
 
 ### Read the first failure, not the last
 
-The checks run in pipeline order, and a failure at one level invalidates the measurements below it:
+The checks run in pipeline order, and a failure at one level invalidates the measurements at every level after it:
 
 | level | covers | a failure here means |
 | --- | --- | --- |
@@ -158,7 +158,7 @@ Work down this list and stop at the first step that fails. Each step names a che
 | 7 | Does the conversion preserve them? | `L3.conversion-snap` | under 5% of converted points on whole device pixels |
 | 8 | Does the conversion preserve the shape? | `L3.conversion-lossless` | turn angle out equals turn angle in |
 
-Steps 1 and 2 cover the environment, 3 to 5 the surface, 6 to 8 the coordinates. That order matters for the reason section 2 gives: each stage looks wrong when a stage above it breaks.
+Steps 1 and 2 cover the environment, 3 to 5 the surface, 6 to 8 the coordinates. That order matters for the reason section 2 gives: each stage looks wrong when an earlier stage breaks.
 
 ### When all eight pass and the stroke still looks wrong
 
@@ -275,7 +275,7 @@ This comparison needs no threshold, which the three measurements above all do. A
 
 Feed it the same points, converted. A stroke drawn twice gives two different paths and measures nothing.
 
-## 6. Measurements that lie
+## 6. Measurements that cannot detect the fault
 
 Every entry below cost a wrong conclusion during the investigation that produced this page. Each one looked like evidence at the time.
 
@@ -331,7 +331,7 @@ Each answer eliminates something:
 
 **"It looks wrong" carries weight, even against a clean report.** A person found every fault in this investigation, and the first report arrived against an application that passed every check existing at the time. Someone saying a stroke looks wrong has found something the checks do not cover, and the right response is to find out what rather than to cite the report.
 
-**"It looks right" establishes less than it appears to.** Scribble.Avalonia and Scribble.WinUI both drew that verdict while rendering at 44% of the display resolution. A partial fix, a wide brush, or a resampled canvas all produce a stroke that satisfies the eye over a wrong pipeline.
+**"It looks right" establishes less than it appears to.** Scribble.Avalonia and Scribble.WinUI both received that verdict while rendering at 44% of the display resolution. A partial fix, a wide brush, or a resampled canvas all produce a stroke that satisfies the eye over a wrong pipeline.
 
 So the two kinds of evidence do different jobs. A person finds faults that no measurement anticipated. A measurement proves a stage clean in a way no amount of looking can.
 

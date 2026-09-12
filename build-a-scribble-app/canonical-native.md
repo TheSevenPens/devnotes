@@ -78,7 +78,7 @@ It produces `WinPenKit.Native.dll`, its import library, and `ScribbleCpp.exe`.
 
 Build and run the sample. A window opens. Nothing draws yet, and nothing should.
 
-If the build fails, fix it here. Every later section adds something that can fail on its own, and a toolchain fault underneath those looks exactly like a fault in the code you just wrote.
+If the build fails, fix it here. Every later section adds something that can fail on its own, and a toolchain fault looks exactly like a fault in the code you just wrote.
 
 ## 2. Per-Monitor V2, before the first window
 
@@ -433,7 +433,7 @@ Measured on a 1440p display at 1.75x, drawing through a Wintab digitizer context
 | as the session delivered it | 4.11 deg | 0 of 3014 |
 | after a conversion through an integer point | **17.51 deg** | **3014 of 3014** |
 
-Every point snapped. On screen that reads as a stroke made of short straight segments meeting at visible angles, worst on slow curves. It looks like a brush engine problem and survives any amount of work on the brush engine.
+Every point snapped. On screen that reads as a stroke made of short straight segments meeting at visible angles, worst on slow curves. It looks like a brush engine problem, and no change to the brush engine removes it.
 
 ### Every framework has this problem
 
@@ -446,7 +446,7 @@ Win32 puts the integers in front of you. You write the `POINT` yourself, so the 
 | Avalonia | `TopLevel.PointToScreen` | returns `PixelPoint`, whose members are `int` |
 | WPF | `Visual.PointFromScreen(Point)` | **invisible**: takes and returns two `double`s, and truncates internally through a Win32 `POINT` |
 
-**That is why this guide set starts with C++.** WPF gives no sign of the problem at all: a `Point` goes in, a `Point` comes out, and both hold `double`s. Someone who first met the trap as a struct they typed themselves recognises its shape anyway, in a signature that shows nothing. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers all four in detail.
+**That is why this guide set starts with C++.** WPF gives no sign of the problem at all: a `Point` goes in, a `Point` comes out, and both hold `double`s. Someone who first wrote that `POINT` struct by hand knows to check the parameter type even when the signature shows only `double`. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers all four in detail.
 
 ### Verify
 
@@ -594,7 +594,7 @@ A slow, gently curving stroke matters for the first one. Faceting worsens as the
 
 **"It looks right" establishes less.** A wide brush, a fast stroke, or a display at 1:1 zoom all hide faults that a slow stroke at 3x zoom would show.
 
-[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers the whole of this: the four symptoms, which stage each one comes from, and the measurements that mislead.
+[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md) covers the whole of this: the four symptoms, which stage each one comes from, and the measurements that cannot detect the fault.
 
 ### Where to go next
 

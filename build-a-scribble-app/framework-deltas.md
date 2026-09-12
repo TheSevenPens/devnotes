@@ -25,7 +25,7 @@ Each column names a working implementation in WinPenKit. Every row holds somethi
 
 Two readings of that table matter more than the individual cells.
 
-**The first four columns are the same lesson four times.** The conversion method exists in every framework, and its parameter type gets harder to read from left to right until WPF, where the signature stops saying anything at all. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers the four signatures in detail.
+**The first four columns are the same lesson four times.** The conversion method exists in every framework, and its parameter type gets harder to read from left to right until WPF, whose signature gives no sign of the limit. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers the four signatures in detail.
 
 **The last two columns offer no such method, and that helps rather than hurts.** WinUI and egui give you nothing to misuse. You compute the origin and subtract it because no alternative exists, which is the correct approach anyway.
 

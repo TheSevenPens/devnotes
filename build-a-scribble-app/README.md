@@ -6,7 +6,7 @@ A guided path to building a working pen-input drawing application on Windows usi
 
 ## What makes this different from a tutorial
 
-**The reader may have no eyes.** Every stroke-quality bug found while building the six Scribble samples was found by a person looking at a stroke and saying it looked bumpy. An agent following a guide cannot do that, and neither can CI.
+**The reader may not be able to see the screen.** Every stroke-quality bug found while building the six Scribble samples was found by a person looking at a stroke and saying it looked bumpy. An agent following a guide cannot do that, and neither can CI.
 
 So diagnostics are **step one of the build**, not a troubleshooting appendix. The app is built to report its own state in text from the first page, because text is the only channel an agent has. Every guide here reaches a working canvas only after it can already tell you whether that canvas is correct.
 
@@ -25,7 +25,7 @@ Two, either sufficient on its own. They build the same app with the same diagnos
 
 The C++ path is canonical because **nothing is hidden**: you type the `POINT` struct yourself, so the central trap of pen input is self-evident rather than asserted. The WinForms path exists because a working app today beats a deeper model next week, and it links to the concept page for the parts it wraps.
 
-Then [WPF](hard-mode-wpf.md), which is hard mode — the only framework where all three trap classes appear at once — followed by [short deltas](framework-deltas.md) for Avalonia, WinUI and Rust.
+Then [WPF](hard-mode-wpf.md), the only framework where all three trap classes appear at once, followed by [short deltas](framework-deltas.md) for Avalonia, WinUI and Rust.
 
 ## Why this order
 
@@ -48,13 +48,13 @@ It also teaches the single most important lesson three times, with the concealme
 | WinForms | `System.Drawing.Point { int X, Y }` | still obviously integer, now behind a method |
 | WPF | `System.Windows.Point { double X, Y }` | **looks safe, is not** |
 
-By the time the signature actively lies, the reader already knows what to suspect.
+By the time the parameter type gives no sign of the limit at all, the reader already knows what to suspect.
 
 ## The pages
 
 - **[Native / C++](canonical-native.md)** — canonical entry point, nothing hidden
 - **[WinForms](canonical-winforms.md)** — canonical entry point, fastest to working
-- **[WPF](hard-mode-wpf.md)** — hard mode: truncation, DIP-sized surfaces, fractional alignment
+- **[WPF](hard-mode-wpf.md)** — all three traps at once: truncation, DIP-sized surfaces, fractional alignment
 - **[Framework deltas](framework-deltas.md)** — Avalonia, WinUI, Rust
 - **[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md)** — the decision tree, framework-agnostic
 
