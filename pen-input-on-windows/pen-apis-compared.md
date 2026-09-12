@@ -39,6 +39,8 @@ Tablet digitizers have much higher internal resolution than the screen. A modern
 
 Most pen APIs expose screen-based coordinates. That is usually fine. If you need tablet-native precision, Wintab is the only practical option in a modern Windows app. To get it, you must configure Wintab to use its digitizer high-resolution context.
 
+Note that **Qt configures the high-resolution context unconditionally**, so every Qt application — Krita among them — is already on tablet-native input. See [Qt always uses the high-resolution context](../misc/krita-and-qt/qt-pen-api-implementation-notes.md#qt-always-uses-the-high-resolution-tablet-native-context) for the code, and for what the screen-pixel mapping costs in measured stroke quality.
+
 <table data-full-width="true"><thead><tr><th>API</th><th>Coordinates</th><th>Precision</th></tr></thead><tbody><tr><td><strong>Wintab (System)</strong></td><td>Physical screen pixels</td><td>Screen resolution (~200 DPI)</td></tr><tr><td><strong>Wintab (Digitizer Hi-Res)</strong></td><td>Tablet native units</td><td>Tablet resolution (up to 5080+ LPI)</td></tr><tr><td><strong>WM_POINTER / WM_POINTERUPDATE</strong></td><td>Physical screen pixels</td><td>Screen resolution¹</td></tr><tr><td><strong>Windows Ink (WinUI PointerPoint)</strong></td><td>DIPs (device-independent pixels)</td><td>DIP resolution</td></tr><tr><td><strong>Windows Ink (WPF StylusPoint)</strong></td><td>WPF device-independent units</td><td>WPF layout resolution</td></tr><tr><td><strong>RealTimeStylus (COM)</strong></td><td>HIMETRIC (0.01mm)</td><td>Up to ~2540 DPI²</td></tr></tbody></table>
 
 #### Coordinate precision comparison
