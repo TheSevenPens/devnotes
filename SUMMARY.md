@@ -20,6 +20,7 @@
     * [DPI and Pen Coordinates](pen-input-on-windows/implementation-notes/dpi-and-pen-coordinates.md)
     * [Framework Coordinate Conversion](pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md)
     * [Per-Monitor V2 DPI Awareness](pen-input-on-windows/implementation-notes/per-monitor-v2-dpi-awareness.md)
+    * [Layout rounding and the canvas origin](pen-input-on-windows/implementation-notes/layout-rounding-and-the-canvas-origin.md)
     * [WM\_POINTER Event Coalescing](pen-input-on-windows/implementation-notes/wm-pointer-coalescing.md)
     * [Wintab input routing](pen-input-on-windows/implementation-notes/wintab-input-routing.md)
     * [WM\_POINTER input routing](pen-input-on-windows/implementation-notes/framework-pen-input-routing.md)
