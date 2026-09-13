@@ -21,7 +21,7 @@ Each column names a working implementation in WinPenKit. Every row holds somethi
 | what that method costs you | a `POINT` of two `LONG`, in the signature | `Point` with `int` members, behind a method | two `double`s, truncating with no sign of it | returns `PixelPoint`, whose members are `int` | — | — |
 | surface sized from | `WM_SIZE` | `Panel.Width` | `ActualWidth` × scale | `Bounds` × `RenderScaling` | `ActualWidth` × `RasterizationScale` | `available_size()` × ppp |
 | what keeps presentation 1:1 | `BitBlt` | `DrawImageUnscaled` | bitmap DPI `96 * scale` | bitmap DPI `96 * scale` | `Image.Width = w / scale` | present at the pixmap's own size |
-| explicit layout rounding | not applicable | not applicable | `UseLayoutRounding` | none in the sample | none in the sample | by hand |
+| explicit layout rounding | not applicable | not applicable | `UseLayoutRounding` | none needed, the framework rounds | none needed, the framework rounds | by hand |
 
 Two readings of that table matter more than the individual cells.
 
@@ -182,13 +182,23 @@ That changes which symptom a person reports. In WPF and Avalonia an undersized s
 
 ```rust
 let canvas_screen_min = egui::pos2(
-    (raw_screen_min.x * ppp).round() / ppp,
-    (raw_screen_min.y * ppp).round() / ppp,
+    (raw_screen_min.x * ppp + TIE).round() / ppp,
+    (raw_screen_min.y * ppp + TIE).round() / ppp,
 );
 let snap_shift = canvas_screen_min - raw_screen_min;
 ```
 
 A panel below a text-sized ribbon starts wherever that ribbon happens to end, which lands on a fraction of a pixel routinely.
+
+**Snapping alone is not enough, and the sample shipped with only the snap for four months.** Size the panel first, so the offset is a whole number of device pixels and there is nothing to snap:
+
+```rust
+egui::TopBottomPanel::top("ribbon").exact_height(snap_panel_height(130.0, ppp))
+```
+
+130 points at 2.25 is 292.5 device pixels. A permanent half means every snap resolves a tie, and a tie is decided by `f32` noise rather than by the rounding rule — one frame reading 673.4999 where the next reads 673.5000 moves the canvas a pixel with nothing on screen having moved. That produced an acceptance failure on roughly one run in eight, blamed on a cached origin it had nothing to do with.
+
+`TIE` above is a small epsilon, and it is insurance rather than the fix: it makes a value either side of `.5` resolve consistently for whatever margin the height calculation did not anticipate. [Layout rounding and the canvas origin](../pen-input-on-windows/implementation-notes/layout-rounding-and-the-canvas-origin.md) has the measurements and the per-framework table.
 
 Present at the snapped origin, and at the pixmap's own size:
 
@@ -248,5 +258,5 @@ The same limits apply to all six:
 ## To write
 
 - [ ] Cite the Avalonia change that fixed its internal quantization in 11.3, rather than asserting the version from memory
-- [ ] Confirm whether Avalonia and WinUI round layout to device pixels by default, or whether the samples pass by luck of their ribbon heights
+- [x] Confirm whether Avalonia and WinUI round layout to device pixels by default, or whether the samples pass by luck of their ribbon heights — **both round by default; not luck.** Shifting each sample's ribbon by one logical unit at 2.25x left the canvas origin on a whole device pixel and therefore on a fractional logical one: Avalonia 678px = 301.33 DIP, WinUI 730px = 324.44 effective px. Measured 12 Sep 2026
 - [ ] Re-run the six-sample table at 100% scaling, where the logical-to-physical column should read 1.00 for all six, and check that every sample still passes
