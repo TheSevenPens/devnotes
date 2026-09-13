@@ -47,4 +47,4 @@ When switching input APIs in an application, a restart is strongly recommended �
 
 This is why apps like Krita require a restart when switching between Wintab and Windows Ink.
 
-**Note:** The [WinPenSession](https://github.com/TheSevenPens/WinPenSession) SDK was designed to support runtime API switching without a restart. This works because each session is an independent object with its own lifecycle — stopping one and starting another is a clean operation. However, the underlying driver behavior still applies: if the driver suppresses one API when the other is active, switching may not produce data until the process is restarted.
+**Note:** The [WinPenKit](https://github.com/TheSevenPens/WinPenKit) SDK was designed to support runtime API switching without a restart. This works because each session is an independent object with its own lifecycle — stopping one and starting another is a clean operation. However, the underlying driver behavior still applies: if the driver suppresses one API when the other is active, switching may not produce data until the process is restarted.
