@@ -1,5 +1,51 @@
 # Rendering options for paint apps
 
+## Segments per event, or dabs along a distance
+
+This decides how a stroke looks before any renderer choice matters, and the two common answers
+are not close together.
+
+**One segment per event.** Draw a straight line between consecutive pen events, width from that
+event's pressure. Simple, and what every sample in the WinPenKit repository does. Its weakness
+shows at speed: a fast event pair is one long thin segment, so fast ink comes out sparse and
+angular.
+
+**Dabs along a distance.** Carry an accumulated distance *across* events and stamp a dab
+every time enough distance has built up. This is what Krita does, and the difference is
+structural rather than cosmetic.
+
+In Krita, `KisPaintOpUtils::paintLine` loops while `getNextPointPosition` returns a non-negative
+value and paints one dab per iteration, against a `KisDistanceInformation` supplied by the
+caller. So one event segment yields zero, one or many dabs, and the residual carries forward. The
+isotropic rule is `max(0.5, s) - a` — `s` the current spacing, `a` the distance since the last
+dab, 0.5 being `MIN_DISTANCE_SPACING`. If that remainder fits in the segment, a dab lands there
+and the accumulator resets; if not, the segment length is added to the accumulator and the call
+returns −1. Spacing is brush-dependent, and for the Pixel Brush pressure changes dab size and
+spacing together. Anisotropic (ellipse) and timed (airbrush) paths exist alongside the isotropic
+one, with the minimum of the valid factors winning.
+
+**The property worth naming is segmentation invariance.** One 10-unit segment and ten 1-unit
+segments put dabs in the same places — 2.5, 5, 7.5, 10. Per-event painting does not have it. A
+control that resets the accumulator each event paints nothing at all, which is a useful test: if
+your spacing implementation still paints with the accumulator reset, it is not carrying state.
+
+Two things follow for anyone comparing their ink against Krita's:
+
+- **There is no Krita setting that paints one segment per event.** `NO_SMOOTHING` still runs the
+  spacing loop; it calls `paintLine` directly on consecutive points and skips only the Bezier
+  interpolation the other modes do. Smoothing chooses *which* points reach the painter, not
+  whether spacing applies.
+- **Comparing appearance measures your renderer, not your pen stack.** Comparing coordinates in
+  against coordinates out is a different and still-valid comparison.
+
+Whether to implement spacing is a separate question from getting pixels on screen, which is what
+the rest of this page is about. A pen input library has no business owning it; a paint
+application does.
+
+> Verified against `KDE/krita` at commit `1e6586cb`, the generic Pixel Brush path. The Pixel Brush
+> has a sharpness-enabled 1×1 branch that draws a DDA line, and other paint engines can override
+> painting, so this is the ordinary path rather than every preset.
+
 ## Retained vs Bitmap-Backed
 
 **Retained mode** (XAML Line elements, SVG paths): Each stroke segment becomes an object in the framework's visual tree. Simple to implement, but performance degrades as stroke count grows — layout and rendering slow down with thousands of elements.
