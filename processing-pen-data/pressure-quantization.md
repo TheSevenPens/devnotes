@@ -61,15 +61,15 @@ At `N = 4`:
 
 All three are defensible in the abstract. Only one behaves well under a pen.
 
-| rule | what it does to the range | consequence |
-| ---- | ------------------------- | ----------- |
-| **nearest** | the bottom `1/(2N)` of the range maps to zero | at low levels **a light touch makes no mark at all** — the brush has a dead zone that widens as levels drop |
-| **floor** | the top bucket is a single point, `x = 1` exactly | **full pressure is unreachable** — you only get `1.0` at the pen's exact maximum, which never happens |
-| **ceiling** | `N` equal nonzero buckets | what the level number promises |
+| rule        | what it does to the range                         | consequence                                                                                                 |
+| ----------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **nearest** | the bottom `1/(2N)` of the range maps to zero     | at low levels **a light touch makes no mark at all** — the brush has a dead zone that widens as levels drop |
+| **floor**   | the top bucket is a single point, `x = 1` exactly | **full pressure is unreachable** — you only get `1.0` at the pen's exact maximum, which never happens       |
+| **ceiling** | `N` equal nonzero buckets                         | what the level number promises                                                                              |
 
 Ceiling's cost is real and should be stated rather than hidden: at 4 levels, the lightest possible touch immediately produces 25% pressure. There is no fade-in.
 
-That is the right trade against a dead zone, because of how the two failures *read*. A missing mark reads as broken input — the user presses and nothing happens, and concludes the pen or the app is faulty. An abrupt entry reads as a coarse pen, which is exactly the thing being modelled. One failure mode is a bug; the other is the feature working.
+That is the right trade against a dead zone, because of how the two failures _read_. A missing mark reads as broken input — the user presses and nothing happens, and concludes the pen or the app is faulty. An abrupt entry reads as a coarse pen, which is exactly the thing being modelled. One failure mode is a bug; the other is the feature working.
 
 ## The floating-point detail that will bite
 
@@ -90,16 +90,10 @@ At 8192 levels a bucket is `0.0001` wide, so `1e-9` cannot swallow a real one �
 [0, 8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2]
 ```
 
-The upper end mirrors real tablet pressure resolutions, which is what makes the setting legible: picking 1024 on an 8192-level pen shows what *that pen* would feel like, rather than an abstract number of steps.
+The upper end mirrors real tablet pressure resolutions, which is what makes the setting legible: picking 1024 on an 8192-level pen shows what _that pen_ would feel like, rather than an abstract number of steps.
 
 The bottom three are below anything real hardware does. They exist because that is where the effect becomes unmistakable on screen — useful for confirming the stage is working at all, and for demonstrating it to someone else.
 
-## Open question: tilt and twist
-
-Whether quantization should apply to tilt and twist as well is unresolved. Those have their own hardware resolutions and the same argument applies.
-
-They are angular, though, and **twist wraps at 360°**. The bucket arithmetic above is not the same function on a circle, and reusing it naively would be wrong at the wrap point — the bucket spanning 359°–0° is not left-open and right-closed in any consistent direction. Anyone implementing this should treat it as a separate problem rather than a parameter change.
-
 ## See also
 
-- [Position Smoothing](position-smoothing.md) — the same pipeline, on the path rather than the pressure
+* [Position Smoothing](position-smoothing.md) — the same pipeline, on the path rather than the pressure
