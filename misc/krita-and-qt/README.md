@@ -55,7 +55,7 @@ On Windows, Qt supports two mutually exclusive tablet input paths:
 * WM\_POINTER (the default)
 * WinTab
 
-See: [WinTab vs WM\_POINTER](../../pen-input-on-windows/pen-input/wintab-vs-wm_pointer.md)
+See: [WinTab vs WM\_POINTER](../../pen-input-on-windows/pipeline/1-source.md)
 
 To consume tablet data, use QTabletEvent. See [QTabletEvent](qtabletevent.md), which abstracts away the pen API.
 
@@ -82,7 +82,7 @@ Initialization happens **BEFORE QApplication is fully running**.
 
 Qt6 is new for Krita (starting in Krita 6.0 in March 2026).
 
-The paths are slightly different for Qt5 and Qt6 in Krita. See the [Implementation notes](../../pen-input-on-windows/implementation-notes/).
+The paths are slightly different for Qt5 and Qt6 in Krita. See the [Krita pen API implementation notes](krita-pen-api-implementation-notes.md).
 
 ## Runtime detection of pen API
 

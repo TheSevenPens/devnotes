@@ -1,0 +1,24 @@
+redirects:
+  pen-input-on-windows/pen-input: pen-input-on-windows/pipeline/README.md
+  pen-input-on-windows/pen-input/challenges-developing-pen-aware-applications: pen-input-on-windows/pipeline/README.md
+  pen-input-on-windows/pen-input/what-is-windows-ink: pen-input-on-windows/pipeline/1-source.md
+  pen-input-on-windows/pen-input/windows-pen-api-landscape: pen-input-on-windows/pipeline/1-source.md
+  pen-input-on-windows/pen-input/wintab-vs-wm_pointer: pen-input-on-windows/pipeline/1-source.md
+  pen-input-on-windows/pen-input/apis-by-scenario: pen-input-on-windows/pipeline/1-source.md
+  pen-input-on-windows/pen-input/unifying-pen-apis-with-pensession: pen-input-on-windows/pipeline/7-output.md
+  pen-input-on-windows/pen-input/unifying-pen-apis-with-pensession/framework-input-routing: pen-input-on-windows/pipeline/2-delivery.md
+  pen-input-on-windows/pen-input/unifying-pen-apis-with-pensession/pensession-tilt-handling: pen-input-on-windows/pipeline/6-values.md
+  pen-input-on-windows/pen-apis-compared: pen-input-on-windows/pipeline/api-reference.md
+  pen-input-on-windows/implementation-notes: pen-input-on-windows/pipeline/README.md
+  pen-input-on-windows/implementation-notes/latency-implications: pen-input-on-windows/pipeline/3-timing.md
+  pen-input-on-windows/implementation-notes/wintab-vs-windows-ink-driver-conflict: pen-input-on-windows/pipeline/1-source.md
+  pen-input-on-windows/implementation-notes/known-quirks-and-gotchas: pen-input-on-windows/pipeline/README.md
+  pen-input-on-windows/implementation-notes/dpi-and-pen-coordinates: pen-input-on-windows/pipeline/4-device-to-desktop.md
+  pen-input-on-windows/implementation-notes/per-monitor-v2-dpi-awareness: pen-input-on-windows/pipeline/4-device-to-desktop.md
+  pen-input-on-windows/implementation-notes/framework-coordinate-conversion: pen-input-on-windows/pipeline/5-desktop-to-canvas.md
+  pen-input-on-windows/implementation-notes/layout-rounding-and-the-canvas-origin: pen-input-on-windows/pipeline/5-desktop-to-canvas.md
+  pen-input-on-windows/implementation-notes/wm-pointer-coalescing: pen-input-on-windows/pipeline/3-timing.md
+  pen-input-on-windows/implementation-notes/wintab-input-routing: pen-input-on-windows/pipeline/2-delivery.md
+  pen-input-on-windows/implementation-notes/framework-pen-input-routing: pen-input-on-windows/pipeline/2-delivery.md
+  pen-input-on-windows/implementation-notes/wintab-gotchas: pen-input-on-windows/pipeline/1-source.md
+  pen-input-on-windows/implementation-notes/tilt-representations: pen-input-on-windows/pipeline/6-values.md

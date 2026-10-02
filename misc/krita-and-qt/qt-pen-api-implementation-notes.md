@@ -69,7 +69,7 @@ Note what this is and is not:
 
 * It is **not** a different context type. Qt starts from `WTI_DEFSYSCTX`, the same system context
   template most code starts from - and the one that is [more reliable than
-  `WTI_DEFCONTEXT`](../../pen-input-on-windows/implementation-notes/wintab-gotchas.md).
+  `WTI_DEFCONTEXT`](../../pen-input-on-windows/pipeline/1-source.md).
 * The only change is **`lcOutExt` overridden to `lcInExt`** - the tablet's own input extents
   rather than the screen-pixel output range the template arrives with.
 * `lcOutExtY` is negated, which is Qt's way of handling the bottom-left tablet origin against the
@@ -150,7 +150,7 @@ reporting ~2 px steps means the coordinates have been through an integer somewhe
 1. Override `lcOutOrg`/`lcOutExt` to `lcInOrg`/`lcInExt` when opening the context.
 2. Cache the system context's `InOrg/InExt -> SysOrg/SysExt` mapping and convert through it -
    see [Wintab
-   gotchas](../../pen-input-on-windows/implementation-notes/wintab-gotchas.md), which covers the
+   gotchas](../../pen-input-on-windows/pipeline/1-source.md), which covers the
    `ScaleAxis` conversion and the Y negation.
 3. **Keep the result in floating point all the way to the canvas.** This is the step that is
    easiest to get wrong after doing the hard part correctly: a single conversion through an

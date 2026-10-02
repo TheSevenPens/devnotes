@@ -166,10 +166,10 @@ Two corollaries:
 
 **Consider smoothing harder on quantized input than on sub-pixel input** — and know which one you have. If you are reading screen coordinates from a system-coordinate API, averaging is recovering real information. If you have a digitizer context delivering sub-pixel positions, it is only taste.
 
-**Fix the coordinates first.** Smoothing to recover quantization error is worth doing when quantization is unavoidable. It is a poor substitute for not quantizing in the first place — and quantization is often being introduced by the application itself, in a coordinate conversion, rather than by the API. See [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md).
+**Fix the coordinates first.** Smoothing to recover quantization error is worth doing when quantization is unavoidable. It is a poor substitute for not quantizing in the first place — and quantization is often being introduced by the application itself, in a coordinate conversion, rather than by the API. See [Framework Coordinate Conversion](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md).
 
 ## See also
 
 - [Pressure Quantization](pressure-quantization.md) — the same pipeline, on pressure rather than the path
 - [Krita pen api implementation notes](../misc/krita-and-qt/krita-pen-api-implementation-notes.md)
-- [Latency implications](../pen-input-on-windows/implementation-notes/latency-implications.md)
+- [Latency implications](../pen-input-on-windows/pipeline/3-timing.md)
