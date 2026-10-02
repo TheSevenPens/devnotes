@@ -139,7 +139,7 @@ See [Rendering options for paint apps](../../rendering-for-pen-apps.md) and [fra
 
 **What detects it.** No automated check. `WinPenKit.TestConsole` prints raw pressure with its percentage of `MaxPressure`, Z, `Cursor` and `Buttons` in hex on each update. `StrokeRecorder` writes the session's `MaxPressure` into the recording header when the session starts, not at save, because an app can switch API mid-recording. For a lumpy stroke, replay the same path with pressure held constant: if the width still varies, the fault is in the pressure path.
 
-**Needs a person.** All of it: pressing through the full range, each barrel button, the eraser end, tilt and rotation. Check `Capabilities` against what the device does: `WmPointerSession` fills `Twist` without setting the `Twist` capability flag. See [Stage 6](6-values.md).
+**Needs a person.** All of it: pressing through the full range, each barrel button, the eraser end, tilt and rotation. Check `Capabilities` against what the device does. Every session sets the `Twist` flag, and a pen without a rotation sensor reports 0 on every backend, so rotate a pen that has one and check that the value changes. See [Stage 6](6-values.md).
 
 ## Stage 7: Output and switching APIs
 

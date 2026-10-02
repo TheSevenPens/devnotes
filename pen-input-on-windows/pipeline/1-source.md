@@ -116,10 +116,10 @@ These are requirements of real drivers that the Wintab 1.4 specification does no
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `WintabSystem` | yes | yes | yes | yes | yes | yes | no | yes | yes |
 | `WintabDigitizer` | yes | yes | yes | yes | yes | yes | while the high-res context is open | yes | yes |
-| `WmPointer`, `WinFormsPointer` | yes | yes | no | no | yes | yes | while `GetPointerDeviceRects` succeeds | no | no |
-| `WpfStylus`, `WinUiPointer`, `AvaloniaPointer` | yes | yes | no | no | yes | yes | no | no | no |
+| `WmPointer`, `WinFormsPointer` | yes | yes | yes | no | yes | yes | while `GetPointerDeviceRects` succeeds | no | no |
+| `WpfStylus`, `WinUiPointer`, `AvaloniaPointer` | yes | yes | yes | no | yes | yes | no | no | no |
 
-The pointer and framework sessions fill in `PenPoint.Twist` when the API reports rotation, but none of them sets the `Twist` flag. Read a missing flag as "not advertised", not as "always zero".
+The `Twist` flag means the backend reads twist from its API. A pen without a rotation sensor reports 0 on every backend, including Wintab, so the flag does not say that the pen has the sensor.
 
 ## Traps
 

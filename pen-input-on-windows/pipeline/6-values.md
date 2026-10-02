@@ -8,7 +8,8 @@ This stage turns everything except position into numbers with one meaning: press
 - Divide Wintab azimuth, altitude and twist by 10 to get degrees; WinPenKit's `PenPoint` already holds degrees, with both tilt representations filled.
 - On Wintab, `pkButtons` in relative mode is one press or release event per packet, so keep button state between packets with `PenButtonTracker`.
 - Wintab cursor numbers are assigned by the device (14 is the eraser on the Wacom devices observed), so do not hard-code them for other vendors.
-- Check `PenCapabilities` before reading `Z`, `Status` or `IsInProximity`, which only Wintab fills; note that pointer backends fill `Twist` without setting the `Twist` flag.
+- Check `PenCapabilities` before reading `Z` or `Status`, which only Wintab fills. `IsInProximity` is true on every point the pointer backends deliver; only Wintab reports a point with it false, when the pen leaves.
+- Every backend sets the `Twist` flag, and a pen without a rotation sensor reports 0 on every backend.
 
 ## The problem
 
@@ -95,10 +96,12 @@ public static class PenTiltConversion
 }
 ```
 
+The code above takes positive TiltX in the direction of azimuth 90. WinPenKit's [`PenTilt`](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/PenTilt.cs) uses the same exact relation with TiltX negated: `tan(TiltX) = -tan(θ)·sin(azimuth)` and `tan(TiltY) = tan(θ)·cos(azimuth)`, where θ = 90 − altitude. Call `PenTilt.ToPlanar(azimuth, altitude)` and `PenTilt.ToSpherical(tiltX, tiltY)` to convert in WinPenKit's convention.
+
 Edge cases:
 
-* **Pen upright** (altitude 90, or TiltX = TiltY = 0): azimuth is undefined and any value is valid. The code above returns 0.
-* **Pen flat** (altitude 0): `tan(0)` is 0, so the first function divides by zero. Hardware does not report exactly 0, but guard small altitudes.
+* **Pen upright** (altitude 90, or TiltX = TiltY = 0): azimuth is undefined and any value is valid. The code above returns 0. `PenTilt.ToSpherical` returns 0 whenever the pen is within `PenTilt.UprightThreshold` (0.5 degrees) of vertical, because the direction of a nearly upright pen is mostly sensor noise.
+* **Pen flat** (altitude 0): `tan(0)` is 0, so the first function divides by zero. Hardware does not report exactly 0, but guard small altitudes. `PenTilt` uses `atan2` and does not divide by zero.
 
 Twist (rotation around the pen's long axis) needs both a tablet and a pen with a rotation sensor, such as the Wacom Art Pen. Most pens and most consumer tablets do not report it.
 
@@ -153,27 +156,27 @@ So "only Wintab has barrel pressure and Z" is true among the APIs WinPenKit impl
 
 **Pressure.** `IPenSession.MaxPressure` names the scale; normalize with `(float)pt.Pressure / session.MaxPressure`. The Wintab sessions query it in [WintabSessionBase.cs](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/Wintab/WintabSessionBase.cs) (`QueryMaxPressure`, from `DVC_NPRESSURE` `axMax`) and pass `pkNormalPressure` through. WM\_POINTER and WinForms report 1024 and pass `pressure` through, or 0 when `PEN_MASK_PRESSURE` is clear. WPF, WinUI and Avalonia report 1024 and compute `(uint)(pressure * 1024f)`, which truncates. Any finer resolution in those frameworks' `float` is reduced to 1025 steps; whether WPF's `PressureFactor` carries more than that on a given device has not been measured.
 
-**Tilt.** Both representations are on every point, in degrees. Wintab divides `orAzimuth`, `orAltitude` and `orTwist` by 10 and computes `TiltX = -(90 - altitude) * sin(azimuth)`, `TiltY = (90 - altitude) * cos(azimuth)`. The pointer backends ([WmPointerSession.cs](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/Pointer/WmPointerSession.cs) and the framework sessions) compute `altitude = clamp(90 - sqrt(tiltX² + tiltY²), 0, 90)` and `azimuth = atan2(-tiltX, tiltY)` mod 360, with azimuth set to 0 when the tilt magnitude is 0.5 degrees or less. [WpfStylusSession.cs](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit.Wpf/WpfStylusSession.cs) divides the WPF properties by 100.
+**Tilt.** Both representations are on every point, in degrees. Wintab divides `orAzimuth`, `orAltitude` and `orTwist` by 10 and computes TiltX and TiltY with `PenTilt.ToPlanar`. The pointer backends ([WmPointerSession.cs](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/Pointer/WmPointerSession.cs) and the framework sessions) compute azimuth and altitude with `PenTilt.ToSpherical`, which returns azimuth 0 to 360 and altitude 0 to 90, with azimuth set to 0 within 0.5 degrees of vertical. The native DLL uses the same relation in `src/tilt.h`. [WpfStylusSession.cs](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit.Wpf/WpfStylusSession.cs) divides the WPF properties by 100.
 
-These formulas are the polar form of the tilt vector, and they invert each other, so values round-trip within WinPenKit. They are not the exact relation in the code above. They agree on the axes and near upright, and differ off-axis at low altitude:
+Both directions use the exact relation from [PenTilt.cs](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/PenTilt.cs), so values round-trip within WinPenKit. Earlier versions used the linear form `TiltX = -(90 - altitude) * sin(azimuth)`, `TiltY = (90 - altitude) * cos(azimuth)` and its inverse `altitude = 90 - sqrt(tiltX² + tiltY²)`. The two forms agree on the axes and differ off-axis, most at low altitude:
 
-| Azimuth, altitude | Exact TiltX, TiltY | WinPenKit TiltX, TiltY (magnitude) |
+| Azimuth, altitude | Exact TiltX, TiltY (magnitude, current) | Linear TiltX, TiltY (magnitude, earlier) |
 | --- | --- | --- |
 | 90°, 30° | 60.0°, 0.0° | 60.0°, 0.0° |
 | 45°, 60° | 22.2°, 22.2° | 21.2°, 21.2° |
 | 45°, 30° | 50.8°, 50.8° | 42.4°, 42.4° |
 
-The sign also differs: WinPenKit negates TiltX and documents positive TiltX as a lean to the right. Which sign matches a Wintab device has not been recorded.
+A recording made with the earlier version holds the linear values. WinPenKit negates TiltX relative to the code above and documents positive TiltX as a lean to the right. Which sign matches a Wintab device has not been measured.
 
 An earlier note said `PenPoint` stores tilt in tenths of a degree, with WM\_POINTER values multiplied by 10. The code stores `double` degrees.
 
-**Twist.** Wintab sets `PenCapabilities.Twist`. All five pointer backends fill `Twist` (WM\_POINTER and WinForms from `rotation` when `PEN_MASK_ROTATION` is set, WinUI and Avalonia from `Twist`, WPF from `TwistOrientation`) but none of them sets the `Twist` capability, so a consumer that checks the flag ignores a value that is there.
+**Twist.** Every session sets `PenCapabilities.Twist`, and so does the native WM\_POINTER session (`PEN_CAP_TWIST`). Wintab fills `Twist` from `orTwist`; the five pointer backends fill it from their APIs (WM\_POINTER and WinForms from `rotation` when `PEN_MASK_ROTATION` is set, WinUI and Avalonia from `Twist`, WPF from `TwistOrientation`). The flag means the backend reads twist. It does not mean the pen has a rotation sensor: a pen without one reports 0 on every backend.
 
 **Buttons.** Both Wintab sessions set `lcPktMode = PK_BUTTONS` (relative mode) and `lcBtnDnMask`/`lcBtnUpMask` to all buttons, and pass `pkButtons` through: `Conventions.Buttons` is `WintabEvent`. The pointer backends write `PointerFlags`, a bitmask replaced on every point: bit 0 barrel, bit 1 eraser. WM\_POINTER sets bit 1 from `PEN_FLAG_ERASER`. WPF sets bit 0 for any `StylusButton` that is down except the tip switch, matched by `StylusPointProperties.TipButton.Id`; before that filter, every tip stroke set the barrel bit. [`PenButtonTracker`](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/PenButtonTracker.cs) decodes both: call `Update(pt)` for every drained point in order, then read `IsTipDown` (pressure above 0, or a Wintab tip event), `IsBarrelDown(1..3)` and `IsEraser`. It resets its state when the source switches between Wintab and a pointer backend; call `Reset()` when restarting a session. On pointer backends `IsBarrelDown(2)` and `IsBarrelDown(3)` are always false. [`PenButtonAction`](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/PenButtonAction.cs) and [`PenButtonNumber`](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/PenButtonNumber.cs) name the Wintab codes. `PenPoint.ButtonAction`, `ButtonNumber`, `IsTipPressed`, `IsButtonPressed` and `IsButtonReleased` are `[Obsolete]`: they apply the Wintab decoding to every point and are always false on pointer backends.
 
 **Eraser.** `PenPoint.IsEraser` is `Cursor == PenCursorType.Eraser` (14, from [PenCursorType.cs](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/PenCursorType.cs)). The pointer backends write 13 or 14 themselves (`Conventions.Cursor` is `Normalised`): WM\_POINTER and WinForms from `PEN_FLAG_INVERTED`, WinUI and Avalonia from `IsEraser`, WPF from `Inverted`. Both Wintab sessions pass `pkCursor` through unchanged (`DeviceAssigned`), so on a device that numbers its eraser differently, `IsEraser` is false on Wintab and true on the pointer backends.
 
-**Z, barrel pressure, proximity.** Wintab fills `Z` from `pkZ` and sets `ZHeight`; every other backend writes 0. `pkTangentPressure` is in WinPenKit's packet structure but has no `PenPoint` field. Wintab copies `pkStatus` to `Status` and sets `PenCapabilities.Proximity`; the pointer backends write 0 and leave the flag clear. WinPenKit ignores `WT_PROXIMITY` messages. Hover points do arrive with pressure 0: WM\_POINTER through `WM_POINTERUPDATE`, WPF through `StylusInAirMove`, WinUI and Avalonia through `PointerMoved`.
+**Z, barrel pressure, proximity.** Wintab fills `Z` from `pkZ` and sets `ZHeight`; every other backend writes 0. `pkTangentPressure` is in WinPenKit's packet structure but has no `PenPoint` field. Wintab copies `pkStatus` to `Status` and sets `PenCapabilities.Proximity`. `IsInProximity` is `(Status & TPS_PROXIMITY) == 0`, so it is false on the packet a driver sends when the pen leaves. The pointer backends write 0 and leave the flag clear, so `IsInProximity` is true on every point they deliver, and no point marks the pen leaving. WinPenKit ignores `WT_PROXIMITY` messages. Hover points do arrive with pressure 0: WM\_POINTER through `WM_POINTERUPDATE`, WPF through `StylusInAirMove`, WinUI and Avalonia through `PointerMoved`.
 
 ## Traps
 
@@ -183,9 +186,9 @@ An earlier note said `PenPoint` stores tilt in tenths of a degree, with WM\_POIN
 4. **Using the obsolete `PenPoint` button properties.** Always false on pointer backends. Fix: `PenButtonTracker`.
 5. **Counting the WPF tip switch as a button.** The barrel indicator lights for the length of every stroke. Fix: skip `StylusPointProperties.TipButton`.
 6. **Testing the eraser as `pkCursor == 14`.** Works on the Wacom devices observed and fails on a device with other numbering. Fix: on Wintab, read the cursor's description from `WTInfo(WTI_CURSORS + n, ...)` or test `TPS_INVERT` in `pkStatus`. WinPenKit does neither yet; it tracks the numbering problem as issue 48.
-7. **Treating `IsInProximity` as "in range" on Wintab.** `PenPoint.IsInProximity` returns true when bit 0 of `Status` is set. The Wintab specification and earlier notes describe that bit as set when the pen leaves the context. This has not been checked against a recording. On pointer backends it is always false, because `Proximity` is not advertised. Fix: check `Capabilities.HasFlag(PenCapabilities.Proximity)` first and verify the bit's meaning on your device.
-8. **Checking `PenCapabilities.Twist` before reading `Twist`.** On pointer backends the flag is clear while the value is filled. Fix: until that is fixed, treat a non-zero `Twist` as reported.
-9. **Mixing tilt formulas.** WinPenKit's TiltX/TiltY from Wintab differ from the exact conversion by several degrees off-axis at low altitude (8.4 degrees at azimuth 45, altitude 30), and in the sign of X. Fix: if your brush needs the exact relation, compute it from `Azimuth` and `Altitude` with the code above.
+7. **Reading `TPS_PROXIMITY` as "in range".** The Wintab specification defines the bit as set when the cursor is out of the context, so it is set on the packet sent when the pen leaves. Code that reads the bit directly as "in proximity" gets the inverse. WinPenKit's `IsInProximity` is `(Status & 0x0001) == 0`; an earlier version read the bit directly. On pointer backends `IsInProximity` is true on every point, and no point arrives when the pen leaves. Fix: test `(pkStatus & TPS_PROXIMITY) == 0` for "in range", and check `Capabilities.HasFlag(PenCapabilities.Proximity)` before relying on a leaving point. The bit's meaning has not been checked against a logged `pkStatus` stream.
+8. **Reading the `Twist` flag as "this pen has a rotation sensor".** Every WinPenKit session sets the flag, and a pen without the sensor reports 0. The flag means the backend reads twist from its API, not that the device measures it. Fix: do not use the flag to decide whether to show rotation controls; a constant 0 is what a pen without the sensor reports. Earlier WinPenKit versions left the flag clear on the pointer backends while filling the value.
+9. **Mixing tilt formulas.** The linear form `(90 - altitude) * sin(azimuth)` differs from the exact relation by up to 8.3 degrees off-axis (azimuth 45, altitude 30). Data from earlier WinPenKit versions, or from code that uses the linear form, does not match current WinPenKit values. Fix: use the exact relation, as [`PenTilt`](https://github.com/TheSevenPens/WinPenKit/blob/main/WinPenKit/PenTilt.cs) does, and check the sign of X against your source.
 10. **Forgetting Wintab's tenths.** Values ten times too large. Fix: divide by 10.0, as WinPenKit does.
 
 ## Further reading

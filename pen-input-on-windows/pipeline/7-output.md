@@ -56,7 +56,7 @@ All backends buffer points internally, and the app polls [`IPenSession`](https:/
 Derived members:
 
 - `IsEraser` is `Cursor == PenCursorType.Eraser` (14). It is true while the eraser end is in proximity, before it touches.
-- `IsInProximity` is `(Status & 0x0001) != 0`. Only Wintab sessions advertise `PenCapabilities.Proximity`; elsewhere `Status` is 0 and the property is false on every point, including hover points, so false there means "not reported". What the bit means on Wintab is an open question; see [Stage 6](6-values.md#traps), trap 7.
+- `IsInProximity` is `(Status & 0x0001) == 0`. Bit 0 is Wintab's `TPS_PROXIMITY`, which the specification defines as set when the cursor is out of the context, so the property is false on the packet a driver sends when the pen leaves. On the pointer backends `Status` is 0, so the property is true on every point they deliver. Those backends deliver points only while the pen is in range and send no point when it leaves. Only sessions that advertise `PenCapabilities.Proximity` (Wintab) report a leaving point with the property false. The bit's meaning has not been checked against a logged `pkStatus` stream; see [Stage 6](6-values.md#traps), trap 7.
 - `ButtonAction`, `ButtonNumber`, `IsButtonPressed`, `IsButtonReleased` and `IsTipPressed` are marked `[Obsolete]`. They decode the Wintab encoding whatever the source, so they are always false on the five pointer backends. Use `PenButtonTracker`, which decodes per `Source` and resets its state when the source changes between Wintab and a pointer backend.
 
 ### Session properties that say what the values mean
