@@ -55,7 +55,7 @@ On Windows, Qt supports two mutually exclusive tablet input paths:
 * WM\_POINTER (the default)
 * WinTab
 
-See: [WinTab vs WM\_POINTER](../../pen-input-on-windows/pen-input/wintab-vs-wm_pointer.md)
+See: [WinTab vs WM\_POINTER](../../pen-input-on-windows/pipeline/1-source.md)
 
 To consume tablet data, use QTabletEvent. See [QTabletEvent](qtabletevent.md), which abstracts away the pen API.
 

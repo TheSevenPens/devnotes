@@ -58,7 +58,7 @@ By the time the parameter type gives no sign of the limit at all, the reader alr
 - **[Framework deltas](framework-deltas.md)** — Avalonia, WinUI, Rust
 - **[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md)** — the decision tree, framework-agnostic
 
-Background lives elsewhere and is linked rather than repeated — chiefly [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md), which carries the rule every one of these pages depends on.
+Background lives elsewhere and is linked rather than repeated — chiefly [Framework Coordinate Conversion](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md), which carries the rule every one of these pages depends on.
 
 ## What no guide can give you
 

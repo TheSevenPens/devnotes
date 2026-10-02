@@ -70,7 +70,7 @@ static int Main(string[] args)
 
 The ordering problem disappears, and a different problem takes its place. The property sits in a file you edit once; `Main` you edit often. Delete or reorder `ApplicationConfiguration.Initialize()` during some later change and the awareness call goes with it. The application still runs, the window still opens, and Windows starts reporting scaled coordinates instead of physical ones.
 
-Nothing announces the loss. [Per-Monitor V2 DPI Awareness](../pen-input-on-windows/implementation-notes/per-monitor-v2-dpi-awareness.md) covers what the lower levels report and what a pen does under them. Section 2 builds the check that catches it.
+Nothing announces the loss. [Per-Monitor V2 DPI Awareness](../pen-input-on-windows/pipeline/4-device-to-desktop.md) covers what the lower levels report and what a pen does under them. Section 2 builds the check that catches it.
 
 ### Verify before proceeding
 
@@ -285,7 +285,7 @@ Activated += (_, _) => _session?.OnActivated();
 
 Wintab delivers packets to whichever context sits on top of the driver's overlap order. Losing focus drops yours down that order, and regaining focus does not put it back. Without this line the first stroke after returning to your application disappears, and every stroke after it draws normally.
 
-The pointer-based APIs need nothing here; Windows routes their input by window. The call costs nothing when it does not apply. [Wintab Gotchas](../pen-input-on-windows/implementation-notes/wintab-gotchas.md) covers the rest of the driver's behaviour.
+The pointer-based APIs need nothing here; Windows routes their input by window. The call costs nothing when it does not apply. [Wintab Gotchas](../pen-input-on-windows/pipeline/1-source.md) covers the rest of the driver's behaviour.
 
 ### Drain on a timer
 
@@ -388,7 +388,7 @@ Each one makes the integers easier or harder to see:
 | Avalonia | `TopLevel.PointToScreen` | returns `PixelPoint`, whose members are `int` |
 | WPF | `Visual.PointFromScreen(Point)` | **invisible**: takes and returns two `double`s, and truncates internally through a Win32 `POINT` |
 
-WinForms sits one step along from Win32. The type still says `int`, and you have to read the parameter type rather than the method name to see it. WPF gives no sign at all — a `Point` of two `double`s goes in and comes out — which is why [Build a Scribble app: WPF](hard-mode-wpf.md) comes after this one rather than before. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers all four in detail.
+WinForms sits one step along from Win32. The type still says `int`, and you have to read the parameter type rather than the method name to see it. WPF gives no sign at all — a `Point` of two `double`s goes in and comes out — which is why [Build a Scribble app: WPF](hard-mode-wpf.md) comes after this one rather than before. [Framework Coordinate Conversion](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md) covers all four in detail.
 
 ### What it costs to get this wrong
 

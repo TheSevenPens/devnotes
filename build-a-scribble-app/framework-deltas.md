@@ -25,7 +25,7 @@ Each column names a working implementation in WinPenKit. Every row holds somethi
 
 Two readings of that table matter more than the individual cells.
 
-**The first four columns are the same lesson four times.** The conversion method exists in every framework, and its parameter type gets harder to read from left to right until WPF, whose signature gives no sign of the limit. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers the four signatures in detail.
+**The first four columns are the same lesson four times.** The conversion method exists in every framework, and its parameter type gets harder to read from left to right until WPF, whose signature gives no sign of the limit. [Framework Coordinate Conversion](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md) covers the four signatures in detail.
 
 **The last two columns offer no such method, and that helps rather than hurts.** WinUI and egui give you nothing to misuse. You compute the origin and subtract it because no alternative exists, which is the correct approach anyway.
 
@@ -198,7 +198,7 @@ egui::TopBottomPanel::top("ribbon").exact_height(snap_panel_height(130.0, ppp))
 
 130 points at 2.25 is 292.5 device pixels. A permanent half means every snap resolves a tie, and a tie is decided by `f32` noise rather than by the rounding rule — one frame reading 673.4999 where the next reads 673.5000 moves the canvas a pixel with nothing on screen having moved. That produced an acceptance failure on roughly one run in eight, blamed on a cached origin it had nothing to do with.
 
-`TIE` above is a small epsilon, and it is insurance rather than the fix: it makes a value either side of `.5` resolve consistently for whatever margin the height calculation did not anticipate. [Layout rounding and the canvas origin](../pen-input-on-windows/implementation-notes/layout-rounding-and-the-canvas-origin.md) has the measurements and the per-framework table.
+`TIE` above is a small epsilon, and it is insurance rather than the fix: it makes a value either side of `.5` resolve consistently for whatever margin the height calculation did not anticipate. [Layout rounding and the canvas origin](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md) has the measurements and the per-framework table.
 
 Present at the snapped origin, and at the pixmap's own size:
 

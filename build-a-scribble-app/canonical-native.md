@@ -122,7 +122,7 @@ That looks like a rendering fault in the application, and the investigation went
 
 Both work. The samples use the API call, which suits a single executable that controls its own startup.
 
-A manifest entry applies before any of your code runs, which covers the case where something in your startup path creates a window before `wWinMain` reaches its first line. Prefer it when a framework or a library owns startup. See [Per-Monitor V2 DPI Awareness](../pen-input-on-windows/implementation-notes/per-monitor-v2-dpi-awareness.md) for the per-framework detail.
+A manifest entry applies before any of your code runs, which covers the case where something in your startup path creates a window before `wWinMain` reaches its first line. Prefer it when a framework or a library owns startup. See [Per-Monitor V2 DPI Awareness](../pen-input-on-windows/pipeline/4-device-to-desktop.md) for the per-framework detail.
 
 ### Track the DPI after startup
 
@@ -228,7 +228,7 @@ HWND hwnd = CreateWindowExW(
 
 Nothing reports an error when that happens. `WTOpenA` returns a valid context handle, the session describes itself as running, and the packet count stays at zero. You get silence rather than a diagnosis, and the code reads as correct while you look for the problem elsewhere.
 
-[Wintab Gotchas](../pen-input-on-windows/implementation-notes/wintab-gotchas.md) covers this and several others worth reading before section 5.
+[Wintab Gotchas](../pen-input-on-windows/pipeline/1-source.md) covers this and several others worth reading before section 5.
 
 ### Size the bitmap from the client rect
 
@@ -361,7 +361,7 @@ Draw with a pen. `Pts` climbs, `Off` stays at zero while the pen sits over the c
 
 Nothing draws yet. Section 6 converts those positions, and section 7 puts ink on the surface.
 
-[Wintab Gotchas](../pen-input-on-windows/implementation-notes/wintab-gotchas.md) covers the rest of the driver's behaviour: packet queue sizing, the inverted Y axis, and why `HCTX` has to be pointer-sized.
+[Wintab Gotchas](../pen-input-on-windows/pipeline/1-source.md) covers the rest of the driver's behaviour: packet queue sizing, the inverted Y axis, and why `HCTX` has to be pointer-sized.
 
 ## 6. Desktop pixels to canvas pixels
 
@@ -446,7 +446,7 @@ Win32 puts the integers in front of you. You write the `POINT` yourself, so the 
 | Avalonia | `TopLevel.PointToScreen` | returns `PixelPoint`, whose members are `int` |
 | WPF | `Visual.PointFromScreen(Point)` | **invisible**: takes and returns two `double`s, and truncates internally through a Win32 `POINT` |
 
-**That is why this guide set starts with C++.** WPF gives no sign of the problem at all: a `Point` goes in, a `Point` comes out, and both hold `double`s. Someone who first wrote that `POINT` struct by hand knows to check the parameter type even when the signature shows only `double`. [Framework Coordinate Conversion](../pen-input-on-windows/implementation-notes/framework-coordinate-conversion.md) covers all four in detail.
+**That is why this guide set starts with C++.** WPF gives no sign of the problem at all: a `Point` goes in, a `Point` comes out, and both hold `double`s. Someone who first wrote that `POINT` struct by hand knows to check the parameter type even when the signature shows only `double`. [Framework Coordinate Conversion](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md) covers all four in detail.
 
 ### Verify
 

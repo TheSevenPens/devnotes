@@ -5,7 +5,7 @@
 * Basically this comes down to two choices:
   * WinTab
   * WM\_POINTER
-* See [Pen Input on Windows](pen-input-apis.md) for more details.
+* See [The pen input pipeline](../pen-input-on-windows/pipeline/README.md) for more details.
 
 ## Linux
 
