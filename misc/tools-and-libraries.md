@@ -1,7 +1,25 @@
 # Tools and libraries
 
+**Web based**
+
+Nahkd's Pepetual Pressure Calibrator - [https://nahara.id.vn/tools/perceptual-pressure-calib/](https://nahara.id.vn/tools/perceptual-pressure-calib/)&#x20;
+
+Shavit's tablet firmware - [https://files.shav.it/osu/tablet\_beta/](https://files.shav.it/osu/tablet_beta/)
+
+
+
+
+
+**Local**
+
+*
 * **PenInspector** - [https://github.com/borco/peninspector](https://github.com/borco/peninspector)
 * [GraphicTabletDriverSwitcher](https://github.com/Zarpyk/GraphicTabletDriverSwitcher) - Windows utility to switch between WinTab drivers for Wacom and Huion.
+
+
+
+
+
 * Ciallo
   * Research paper: [https://github.com/ShenCiao/Ciallo/tree/main/paper](https://github.com/ShenCiao/Ciallo/tree/main/paper)&#x20;
   * GitHub page: [https://github.com/ShenCiao/Ciallo](https://github.com/ShenCiao/Ciallo)
