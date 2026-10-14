@@ -337,6 +337,17 @@ Wintab delivers packets to whichever context sits on top of the driver's overlap
 
 The pointer-based APIs need nothing here; Windows routes their input by window. The call costs nothing when it does not apply.
 
+### Tell Windows what the canvas does not want
+
+Windows asks every window which system gestures it wants. A window that does not answer gets a ring and a right click on press-and-hold, a circle under the pen when a button is pressed, and a wave on pen up. Answer once, in the window procedure:
+
+```c
+case 0x02CC:                  // WM_TABLET_QUERYSYSTEMGESTURESTATUS
+    return 0x1 | 0x8 | 0x10;  // press and hold, tap wave, button circle
+```
+
+Put the count of queries in the title bar so you can see Windows asking. [Pen feedback, gestures and the pointer](pen-feedback-and-the-pointer.md) covers what each flag does, the self-test check for it, and what was found about when the circle appears. This step is optional, and the checks in this guide do not include it.
+
 ### Count the points
 
 Add a counter to your ribbon before you draw anything with the data:

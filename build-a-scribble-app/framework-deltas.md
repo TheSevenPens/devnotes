@@ -6,6 +6,8 @@ Three short sections, one per framework, covering only what differs from the gui
 
 This page also does one thing no other page in the set does. It puts all six Scribble samples side by side, and ends with one acceptance run across all of them.
 
+Each framework also answers Windows' gesture query in a different place. That is on [its own page](pen-feedback-and-the-pointer.md), which lists where each Scribble app answers it.
+
 ---
 
 ## The six side by side

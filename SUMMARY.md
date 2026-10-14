@@ -24,6 +24,7 @@
   * [WinForms](build-a-scribble-app/canonical-winforms.md)
   * [WPF](build-a-scribble-app/hard-mode-wpf.md)
   * [Framework deltas](build-a-scribble-app/framework-deltas.md)
+  * [Pen feedback, gestures and the pointer](build-a-scribble-app/pen-feedback-and-the-pointer.md)
   * [Diagnosing a bad stroke](build-a-scribble-app/diagnosing-a-bad-stroke.md)
   * [Generating the symptom images](build-a-scribble-app/generating-symptom-images.md)
 * [Processing pen data](processing-pen-data/README.md)

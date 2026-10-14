@@ -56,6 +56,7 @@ By the time the parameter type gives no sign of the limit at all, the reader alr
 - **[WinForms](canonical-winforms.md)** — canonical entry point, fastest to working
 - **[WPF](hard-mode-wpf.md)** — all three traps at once: truncation, DIP-sized surfaces, fractional alignment
 - **[Framework deltas](framework-deltas.md)** — Avalonia, WinUI, Rust
+- **[Pen feedback, gestures and the pointer](pen-feedback-and-the-pointer.md)** — the ring, the right click and the circle Windows adds around a pen, how a window switches them off, and the cursor and hover pointer
 - **[Diagnosing a bad stroke](diagnosing-a-bad-stroke.md)** — the decision tree, framework-agnostic
 
 Background lives elsewhere and is linked rather than repeated — chiefly [Framework Coordinate Conversion](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md), which carries the rule every one of these pages depends on.
@@ -67,3 +68,4 @@ Stated here so a green acceptance run is never mistaken for a finished app:
 - **Wintab needs a tablet.** Synthetic pen injection does not reach the driver.
 - **The session is not covered by replay.** A recording holds what the session produced, so replaying it tests everything downstream and nothing inside.
 - **Whether a stroke feels right is not machine-checkable.** Deliberately not automated.
+- **What Windows draws around the pen depends on how the pen reaches Windows.** A run with an injected pen can show no circle on a button press while a pen delivered by a driver does. See [Pen feedback, gestures and the pointer](pen-feedback-and-the-pointer.md).

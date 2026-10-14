@@ -326,6 +326,7 @@ Each answer eliminates something:
 | Does it persist on a different pen API?        | the application against the API              |
 | Does it happen in another drawing application? | the application against the device or driver |
 | At 3x or 4x zoom, does it survive?             | a real fault against an artefact of viewing  |
+| Does a ring, a circle or a right-click menu appear when the pen is held or a button is pressed? | Windows' pen feedback reaching the canvas. That is not a stroke fault; see [Pen feedback, gestures and the pointer](pen-feedback-and-the-pointer.md) |
 
 ### What each kind of answer establishes
 
