@@ -287,6 +287,24 @@ Wintab delivers packets to whichever context sits on top of the driver's overlap
 
 The pointer-based APIs need nothing here; Windows routes their input by window. The call costs nothing when it does not apply. [Wintab Gotchas](../pen-input-on-windows/pipeline/1-source.md) covers the rest of the driver's behaviour.
 
+### Tell Windows what the canvas does not want
+
+Windows asks every window which system gestures it wants. A window that does not answer gets a ring and a right click on press-and-hold, a circle under the pen when a button is pressed, and a wave on pen up. Answer in the form:
+
+```csharp
+protected override void WndProc(ref Message m)
+{
+    if (m.Msg == 0x02CC)          // WM_TABLET_QUERYSYSTEMGESTURESTATUS
+    {
+        m.Result = (IntPtr)0x19;  // 0x1 | 0x8 | 0x10: press and hold, tap wave, button circle
+        return;
+    }
+    base.WndProc(ref m);
+}
+```
+
+Put the count of queries in the title bar so you can see Windows asking. [Pen feedback, gestures and the pointer](pen-feedback-and-the-pointer.md) covers what each flag does, the self-test check for it, and what was found about when the circle appears. This step is optional, and the checks in this guide do not include it.
+
 ### Drain on a timer
 
 ```csharp

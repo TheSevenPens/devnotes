@@ -417,6 +417,8 @@ The third one matters most here. Every scale-dependent fault on this page passes
 
 ### Where to go next
 
+[Pen feedback, gestures and the pointer](pen-feedback-and-the-pointer.md) covers the one thing in WPF that needs a hook on the window handle: answering Windows' gesture query, so the ring, the right click and the button circle are switched off. Scribble.Wpf does it with an `HwndSource` hook.
+
 [Framework Coordinate Conversion](../pen-input-on-windows/pipeline/5-desktop-to-canvas.md) covers the same conversion in Win32, WinForms, Avalonia and WPF side by side, with the signature of each.
 
 ---

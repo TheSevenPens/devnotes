@@ -146,6 +146,10 @@ This is useful where a framework does not let you reach the window procedure. It
 | `0x1` ends the press-and-hold ring and right-click; `0x8` removes the tap wave | Not tested |
 | Raw Win32, WinForms and WPF snippets; the `SetProp` route | Not compiled or run |
 
+### Used in the Scribble apps
+
+The Scribble apps answer this message and show how often Windows asks in the title bar. [Build a Scribble app: pen feedback, gestures and the pointer](../../../build-a-scribble-app/pen-feedback-and-the-pointer.md) lists where each app answers it, the self-test check, and what was found about when the circle appears.
+
 ### Related behavior
 
 Visual feedback has two routes. The flags above (`0x8` and `0x10`) are one. [Disable visual feedback](../disable-pen-and-touch-feedback.md) describes the other, `SetWindowFeedbackSetting`, which works per feedback type.
