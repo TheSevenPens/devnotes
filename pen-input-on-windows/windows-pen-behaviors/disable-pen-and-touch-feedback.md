@@ -6,7 +6,7 @@ description: Suppress visual contact feedback for a single window.
 
 ## Disable visual feedback
 
-Windows can draw a ripple at each pen or touch contact. It can also show barrel and right-tap flashes. This feedback is cosmetic.
+Windows can draw a ripple at each pen or touch contact. It can also show barrel and right-tap flashes: a pen barrel-button press draws a small circle under the pen. This feedback is cosmetic.
 
 Use `SetWindowFeedbackSetting` for each `FEEDBACK_TYPE`. This affects one window only. Gestures, including pen right-click, continue to work.
 
@@ -44,6 +44,10 @@ Call this after the window exists. Obtain the window handle through your framewo
 
 {% hint style="info" %}
 You can apply visual-feedback suppression app-wide. It does not disable press-and-hold right-click.
+{% endhint %}
+
+{% hint style="info" %}
+**Two routes for the pen feedback.** The pen-tap wave and the barrel-button circle can also be switched off by answering `WM_TABLET_QUERYSYSTEMGESTURESTATUS` with `TABLET_DISABLE_PENTAPFEEDBACK` (`0x8`) and `TABLET_DISABLE_PENBARRELFEEDBACK` (`0x10`). [That route](disable-press-and-hold-right-click/) is the one tested here: `0x10` alone removed the circle. `FEEDBACK_PEN_BARRELVISUALIZATION` is Microsoft's name for the same feedback in `SetWindowFeedbackSetting` ("feedback for a pen barrel-button event"); calling it against the circle has not been tested.
 {% endhint %}
 
 ### Related behavior
