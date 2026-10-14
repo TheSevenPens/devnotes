@@ -9,6 +9,7 @@ There are two sets of thing Windows does that is special when a pen is involved:
 | ---------------------------------------------------------------- | ------------------------------ |
 | Ripple ring on every **tap - this is called "Dynamic feedback"** | **Visual feedback** (cosmetic) |
 | Press-and-hold **ring** animation                                | **Visual feedback** (cosmetic) |
+| Small **circle** under the pen when a barrel button is pressed   | **Visual feedback** (cosmetic) |
 | Press-and-hold **right-click** (the behavior)                    | **System gesture**             |
 
 The reason why it does this - is historical and I won't cover it here. But in short Microsoft has for decades tried to incorporate a seamless experience with touch and pen input as part of what it original called the "Tablet PC" concept.
